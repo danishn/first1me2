@@ -18,15 +18,16 @@ class CategoryModel extends CI_Model
     public function CreateCategory($displayName, $shortDesc, $longDesc, $status, $pseudoSubscriptionCount){
         $category = new Entities\Category;
         
-        $category->setDisplayname($displayname);
-        $category->setShortdesc($shortdesc);
-        $category->setLongdesc($longdesc);
+        $category->setDisplayname($displayName);
+        $category->setShortdesc($shortDesc);
+        $category->setLongdesc($longDesc);
         
         date_default_timezone_set("Asia/Kolkata");
-        $category->setCreatedon(date("Y-m-d H:i:s"));
+        //$category->setCreatedon(date("Y-m-d H:i:s"));
+        $category->setCreatedon(new \DateTime("now"));
         
         $category->setStatus($status);
-        $category->setPseudosubscriptioncount($pseudosubscriptioncount);
+        $category->setPseudosubscriptioncount($pseudoSubscriptionCount);
         
         try
         {
