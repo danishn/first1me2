@@ -57,7 +57,7 @@ class User extends CI_Controller
             exit;
         }
         
-        $GCMID = "-";
+        $GCMID = isset($_POST['GCMID']) ? $_POST['GCMID'] : "-";    //later this field will be mandatory
         $fbStatus = 0;
         
         $this->load->model('UserModel');
