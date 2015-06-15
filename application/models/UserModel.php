@@ -20,7 +20,8 @@ class UserModel extends CI_Model
         $user = new Entities\User;
         
         $user->setGcmid($GCMID);
-        $user->setLastname($lastname);
+        $user->setFirstname($firstName);
+        $user->setLastname($lastName);
         $user->setEmail($email);
         $user->setMobile($mobile);
         $user->setCountry($country);

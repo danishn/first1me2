@@ -71,7 +71,7 @@ class CategoryModel extends CI_Model
         $subscription->setCategoryid($categoryId);
         
         date_default_timezone_set("Asia/Kolkata");
-        $subscription->setSubscribedon(date("Y-m-d H:i:s"));
+        $subscription->setSubscribedon(new \DateTime("now"));
         
         try
         {
