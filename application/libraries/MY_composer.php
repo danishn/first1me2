@@ -8,6 +8,7 @@ class MY_Composer
 {
     function __construct() 
     {
-        include("/vendor/autoload.php");
+        //include("/vendor/autoload.php");
+        require_once($_SERVER['DOCUMENT_ROOT']."/vendor/autoload.php");
     }
 }
