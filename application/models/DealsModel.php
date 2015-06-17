@@ -20,10 +20,7 @@ class DealsModel extends CI_Model
         
         $deals->setCategoryid($categoryId);
         $deals->setVendorid($vendorId);
-        
-        date_default_timezone_set("Asia/Kolkata");
-        $deals->setCreatedon(date("Y-m-d H:i:s"));
-        
+        $deals->setCreatedon(new \DateTime("now"));
         $deals->setThumbnailimg($thumbnailimg);
         $deals->setBigimg($bigimg);
         $deals->setRegion($region);

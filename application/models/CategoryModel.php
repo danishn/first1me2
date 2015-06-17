@@ -21,9 +21,6 @@ class CategoryModel extends CI_Model
         $category->setDisplayname($displayName);
         $category->setShortdesc($shortDesc);
         $category->setLongdesc($longDesc);
-        
-        date_default_timezone_set("Asia/Kolkata");
-        //$category->setCreatedon(date("Y-m-d H:i:s"));
         $category->setCreatedon(new \DateTime("now"));
         
         $category->setStatus($status);
