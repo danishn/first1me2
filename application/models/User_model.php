@@ -5,7 +5,7 @@
  * Author : Biswajit Bardhan  * 
  */
 
-class UserModel extends CI_Model
+class User_model extends CI_Model
 {
     public $em;                         //doctrine entity manager
 

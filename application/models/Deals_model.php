@@ -5,7 +5,7 @@
  * Author : Biswajit Bardhan  * 
  */
 
-class DealsModel extends CI_Model
+class Deals_model extends CI_Model
 {
     public $em;                         //doctrine entity manager
 

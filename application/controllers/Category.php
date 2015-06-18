@@ -42,13 +42,13 @@ class Category extends CI_Controller
         $status = 1;
         $pseudoSubscriptionCount = 0;
         
-        $this->load->model('CategoryModel');
-        echo json_encode($this->CategoryModel->CreateCategory($displayName, $shortDesc, $longDesc, $status, $pseudoSubscriptionCount));
+        $this->load->model('Category_model');
+        echo json_encode($this->Category_model->CreateCategory($displayName, $shortDesc, $longDesc, $status, $pseudoSubscriptionCount));
     }
     
     public function GetAll(){
-        $this->load->model('CategoryModel');
-        echo json_encode($this->CategoryModel->ReadAllCategory());
+        $this->load->model('Category_model');
+        echo json_encode($this->Category_model->ReadAllCategory());
     }
     
     public function Subscribe(){
@@ -64,7 +64,7 @@ class Category extends CI_Controller
             exit;
         }
         
-        $this->load->model('CategoryModel');
-        echo json_encode($this->CategoryModel->CreateSubscription($userId, $categoryId));
+        $this->load->model('Category_model');
+        echo json_encode($this->Category_model->CreateSubscription($userId, $categoryId));
     }
 }

@@ -64,8 +64,8 @@ class Deals extends CI_Controller
             $pseudoViews = 0;
             $status = 1;
 
-            $this->load->model('DealsModel');
-            echo json_encode($this->DealsModel->CreateDeals($categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
+            $this->load->model('Deals_model');
+            echo json_encode($this->Deals_model->CreateDeals($categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
         }
         else
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));
@@ -77,7 +77,7 @@ class Deals extends CI_Controller
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
             exit;
         }
-        $this->load->model('DealsModel');
-        return json_encode($this->DealsModel->ReadUserDeals($userId));
+        $this->load->model('Deals_model');
+        return json_encode($this->Deals_model->ReadUserDeals($userId));
     }
 }

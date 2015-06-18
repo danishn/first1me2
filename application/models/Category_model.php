@@ -5,7 +5,7 @@
  * Author : Biswajit Bardhan  * 
  */
 
-class CategoryModel extends CI_Model
+class Category_model extends CI_Model
 {
     public $em;                         //doctrine entity manager
 
