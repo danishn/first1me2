@@ -15,6 +15,21 @@ class Category_model extends CI_Model
         $this->em = $this->doctrine->em;
     }
     
+    //-----Helper functions
+    private function getSubscribedCategoryIds($userId)
+    {
+        $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscription')->findBy(array('userId' => $userId));
+        if(!is_array($subscribedCategories))
+            return null;
+        for($i = 0; $i < count($subscribedCategories); $i++)
+        {
+            $categoryIds[$i] = $subscribedCategories[$i]->getCategoryid();
+        }
+        
+        return $categoryIds;
+    }
+    //---------------------
+    
     public function CreateCategory($displayName, $shortDesc, $longDesc, $status, $pseudoSubscriptionCount){
         $category = new Entities\Category;
         
@@ -43,6 +58,7 @@ class Category_model extends CI_Model
         //return Doctrine::getTable('category')->findAll();
         //$data = $this->doctrine->em->find('Entities\Category', 1);
         $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
+        $subscribedCategories = getSubscribedCategoryIds($userId);
         for($i = 0; $i < count($allCategory); $i++)
         {
             $data[$i] = new stdClass();

@@ -108,8 +108,7 @@ class Category extends CI_Controller
         }
     }
     
-    public function Delete()
-    {
+    public function Delete(){
         if(isset($_SESSION['adminId']) && $_SESSION['adminId'] != "")
         {
             if(preg_match("/[0-9]{1,10}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
