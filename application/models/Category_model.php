@@ -81,4 +81,32 @@ class Category_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()));
         }
     }
+    
+    public function UpdateCategory($updateFields, $categoryId)
+    {
+        $user = new Entities\Category;
+        try
+        {
+            $this->db->update('category', $updateFields, array("id" => $categoryId));
+            return array("status" => "success", "data" => array("Category Details Updated Successfully."));
+        }
+        catch(Exception $exc)
+        {
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
+        }
+    }
+    
+    public function DeleteCategory($categoryId)
+    {
+        try
+        {
+            $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
+            $category->delete();
+            return array("status" => "success", "data" => array("Category Deleted Successfully."));
+        }
+        catch(Exception $exc)
+        {
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
+        }
+    }
 }

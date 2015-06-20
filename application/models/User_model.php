@@ -52,7 +52,7 @@ class User_model extends CI_Model
         try
         {
             $this->db->update('user', array("fbStatus" => 1), array("id" => $userId));
-            return array("status" => "success", "data" => array("Facebook Status Successfully."));
+            return array("status" => "success", "data" => array("Facebook Status Updated Successfully."));
         }
         catch(Exception $exc)
         {
