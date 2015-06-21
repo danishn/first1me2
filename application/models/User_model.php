@@ -26,7 +26,7 @@ class User_model extends CI_Model
         $user->setMobile($mobile);
         $user->setCountry($country);
         $user->setCity($city);
-        $user->setPassword($password);
+        $user->setPassword(crypt($password, strlen($email)));
         $user->setFbstatus($fbstatus);
         
         try
@@ -58,5 +58,22 @@ class User_model extends CI_Model
         {
             return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
+    }
+    
+    public function Login($email, $password){
+        $thisUser = $this->doctrine->em->getRepository('Entities\Users')->findBy(array('email' => $email));
+        
+        if(is_array($thisUser) && !empty($thisUser))
+        {
+            if(crypt($password, strlen($email)) == $thisUser[0]->getPassword())
+            {
+                return array("status" => "success", "data" => array("Logged in Successfully.", "userId" => $thisUser->getId()));
+            }
+            else
+                return array("status" => "error", "message" => array("Title" => "Email / Password mismatch.", "Code" => "401"));
+        }
+        else
+            return array("status" => "error", "message" => array("Title" => "User not found.", "Code" => "401"));
+        
     }
 }

@@ -54,11 +54,9 @@ class Category_model extends CI_Model
     }
     
     
-    public function ReadAllCategory(){
-        //return Doctrine::getTable('category')->findAll();
-        //$data = $this->doctrine->em->find('Entities\Category', 1);
+    public function ReadAllCategory($userId){
         $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
-        $subscribedCategories = getSubscribedCategoryIds($userId);
+        
         for($i = 0; $i < count($allCategory); $i++)
         {
             $data[$i] = new stdClass();
@@ -69,6 +67,8 @@ class Category_model extends CI_Model
             $data[$i]->createdOn = $allCategory[$i]->getCreatedon();
             $data[$i]->status = $allCategory[$i]->getStatus();
             $data[$i]->pseudoSubscriptionCount = $allCategory[$i]->getPseudosubscriptioncount();
+            
+            $data[$i]->subscribed = in_array($myDeals[$i]->getId(), getSubscribedCategoryIds($userId));
         }
         
         if(isset($data) && count($data) > 0)
