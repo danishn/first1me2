@@ -78,27 +78,42 @@ class Category_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
-    public function CreateSubscription($userId, $categoryId){
-        var_dump(json_decode($categoryId));exit;
+    public function UpdateSubscription($userId,  $toSubscribe, $toUnSubscribe){
         $subscription = new Entities\Subscriptions;
         
         $user = $this->doctrine->em->getRepository('Entities\User')->find($userId);
-        $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
-        
-        $subscription->setUserid($user);
-        $subscription->setCategoryid($category);
-        $subscription->setSubscribedon(new \DateTime("now"));
-        
-        try
+        foreach($toSubscribe as $category)
         {
-            $this->em->persist($subscription);
-            $this->em->flush();
-            return array("status" => "success", "data" => array("Category Subscribed Successfully."));
+            $subscription->setUserid($user);
+            $subscription->setCategoryid($this->doctrine->em->getRepository('Entities\Category')->find($category));
+            $subscription->setSubscribedon(new \DateTime("now"));
+
+            try
+            {
+                $this->em->persist($subscription);
+                $this->em->flush();
+            }
+            catch(Exception $exc)
+            {
+                return array("status" => "error", "message" => array("Title" => "While Subscribing" . $exc->getTraceAsString(), "Code" => "503"));
+            }
         }
-        catch(Exception $exc)
+        
+        foreach($toUnSubscribe as $category)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
+            try
+            {
+                $this->doctrine->em->remove($this->doctrine->em->getRepository('Entities\Subscriptions')
+                        ->findOneBy(array("userId" => $userId, "categoryId" => $category)));
+                $this->doctrine->em->flush();
+            }
+            catch(Exception $exc)
+            {
+                return array("status" => "error", "message" => array("Title" => "While Unsubscribing" . $exc->getTraceAsString(), "Code" => "503"));
+            }
         }
+        
+        return array("status" => "success", "data" => array("Category Subscribed Successfully."));
     }
     
     public function UpdateCategory($updateFields, $categoryId){
