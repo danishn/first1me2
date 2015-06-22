@@ -39,13 +39,13 @@ class User extends CI_Controller
             exit;
         }
         
-        if(preg_match("/[a-zA-Z]{20}/", $country = isset($_POST['country']) ? trim($_POST['country']) : "") == 0)
+        if(preg_match("/[a-zA-Z]{1,20}/", $country = isset($_POST['country']) ? trim($_POST['country']) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Country Name.", "Code" => "400")));
             exit;
         }
         
-        if(preg_match("/[a-zA-Z]{20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
+        if(preg_match("/[a-zA-Z]{1,20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid City Name.", "Code" => "400")));
             exit;
@@ -60,8 +60,8 @@ class User extends CI_Controller
         $GCMID = isset($_POST['GCMID']) ? $_POST['GCMID'] : "-";    //later this field will be mandatory
         $fbStatus = 0;
         
-        $this->load->model('UserModel');
-        echo json_encode($this->UserModel->CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
     }
     
     public function FacebookShare(){
@@ -71,8 +71,8 @@ class User extends CI_Controller
             exit;
         }
         
-        $this->load->model('UserModel');
-        echo json_encode($this->UpdateFacebookStatus($userId));
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->UpdateFacebookStatus($userId));
     }
     
     public function Login(){

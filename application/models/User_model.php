@@ -27,7 +27,7 @@ class User_model extends CI_Model
         $user->setCountry($country);
         $user->setCity($city);
         $user->setPassword(crypt($password, strlen($email)));
-        $user->setFbstatus($fbstatus);
+        $user->setFbstatus($fbStatustatus);
         
         try
         {
