@@ -50,7 +50,7 @@ class Category_model extends CI_Model
         }
         catch(Exception $exc)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()));
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
     }
     
@@ -73,21 +73,20 @@ class Category_model extends CI_Model
         }
         
         if(isset($data) && count($data) > 0)
-            return array("status" => "success", "data" =>$data);
+            return array("status" => "success", "data" => array($data));
         else
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
     public function CreateSubscription($userId, $categoryId){
+        var_dump(json_decode($categoryId));exit;
         $subscription = new Entities\Subscriptions;
         
         $user = $this->doctrine->em->getRepository('Entities\User')->find($userId);
-        var_dump($user);
-        $subscription->setUserid($user);
-        //$subscription->setUserid($user->getId());
-        $subscription->setCategoryid($categoryId);
+        $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
         
-        date_default_timezone_set("Asia/Kolkata");
+        $subscription->setUserid($user);
+        $subscription->setCategoryid($category);
         $subscription->setSubscribedon(new \DateTime("now"));
         
         try
@@ -98,7 +97,7 @@ class Category_model extends CI_Model
         }
         catch(Exception $exc)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()));
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
     }
     

@@ -60,15 +60,17 @@ class Category extends CI_Controller
     public function Subscribe(){
         if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
         {
-            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID. $userId", "Code" => "400")));
             exit;
         }
         
-        if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
+        /*if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
             exit;
-        }
+        }*/
+        
+        $categoryId = $_POST['categoryId'];
         
         $this->load->model('Category_model');
         echo json_encode($this->Category_model->CreateSubscription($userId, $categoryId));
