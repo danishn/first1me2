@@ -15,8 +15,13 @@ class User_model extends CI_Model
         $this->em = $this->doctrine->em;
     }
     
-    public function CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus)
-    {
+    public function CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus){
+        $thisUser = $this->doctrine->em->getRepository('Entities\User')->findBy(array('email' => $email));
+        if(is_array($thisUser) && !empty($thisUser))
+        {
+            return array("status" => "error", "message" => array("Title" => "Email already exists.", "Code" => "400"));
+        }
+        
         $user = new Entities\User;
         
         $user->setGcmid($GCMID);
@@ -27,18 +32,20 @@ class User_model extends CI_Model
         $user->setCountry($country);
         $user->setCity($city);
         $user->setPassword(crypt($password, strlen($email)));
-        $user->setFbstatus($fbStatustatus);
-        
+        $user->setFbstatus($fbStatus);
+        //var_dump($user);exit;
         try
         {
             $this->em->persist($user);
             $this->em->flush();
             
-            $thisUser = $this->doctrine->em->getRepository('Entities\Users')->findBy(
+            $thisUser = $user->getId();
+            /*$thisUser = $this->doctrine->em->getRepository('Entities\Users')->findOneBy(
                     array('email' => $email)
-                );
+                );*/
             
-            return array("status" => "success", "data" => array("User Added Successfully.", "userId" => $thisUser->getId()));
+            //return array("status" => "success", "data" => array("User Added Successfully.", "userId" => $thisUser->getId()));
+            return array("status" => "success", "data" => array("User Added Successfully.", "userId" => $thisUser));
         }
         catch(Exception $exc)
         {
@@ -61,7 +68,7 @@ class User_model extends CI_Model
     }
     
     public function Login($email, $password){
-        $thisUser = $this->doctrine->em->getRepository('Entities\Users')->findBy(array('email' => $email));
+        $thisUser = $this->doctrine->em->getRepository('Entities\User')->findBy(array('email' => $email));
         
         if(is_array($thisUser) && !empty($thisUser))
         {

@@ -18,9 +18,10 @@ class Category_model extends CI_Model
     //-----Helper functions
     private function getSubscribedCategoryIds($userId)
     {
-        $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscription')->findBy(array('userId' => $userId));
+        $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(array('userid' => $userId));
         if(!is_array($subscribedCategories))
             return null;
+        $categoryIds = array();
         for($i = 0; $i < count($subscribedCategories); $i++)
         {
             $categoryIds[$i] = $subscribedCategories[$i]->getCategoryid();
@@ -49,7 +50,7 @@ class Category_model extends CI_Model
         }
         catch(Exception $exc)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()));
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
     }
     
@@ -68,22 +69,24 @@ class Category_model extends CI_Model
             $data[$i]->status = $allCategory[$i]->getStatus();
             $data[$i]->pseudoSubscriptionCount = $allCategory[$i]->getPseudosubscriptioncount();
             
-            $data[$i]->subscribed = in_array($myDeals[$i]->getId(), getSubscribedCategoryIds($userId));
+            $data[$i]->subscribed = in_array($allCategory[$i]->getId(), self::getSubscribedCategoryIds($userId));
         }
         
         if(isset($data) && count($data) > 0)
-            return array("status" => "success", "data" =>$data);
+            return array("status" => "success", "data" => array($data));
         else
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
     public function CreateSubscription($userId, $categoryId){
+        var_dump(json_decode($categoryId));exit;
         $subscription = new Entities\Subscriptions;
         
-        $subscription->setUserid($userId);
-        $subscription->setCategoryid($categoryId);
+        $user = $this->doctrine->em->getRepository('Entities\User')->find($userId);
+        $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
         
-        date_default_timezone_set("Asia/Kolkata");
+        $subscription->setUserid($user);
+        $subscription->setCategoryid($category);
         $subscription->setSubscribedon(new \DateTime("now"));
         
         try
@@ -94,12 +97,11 @@ class Category_model extends CI_Model
         }
         catch(Exception $exc)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()));
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
     }
     
-    public function UpdateCategory($updateFields, $categoryId)
-    {
+    public function UpdateCategory($updateFields, $categoryId){
         $user = new Entities\Category;
         try
         {
