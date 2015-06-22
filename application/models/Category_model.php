@@ -18,9 +18,10 @@ class Category_model extends CI_Model
     //-----Helper functions
     private function getSubscribedCategoryIds($userId)
     {
-        $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscription')->findBy(array('userId' => $userId));
+        $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(array('userid' => $userId));
         if(!is_array($subscribedCategories))
             return null;
+        $categoryIds = array();
         for($i = 0; $i < count($subscribedCategories); $i++)
         {
             $categoryIds[$i] = $subscribedCategories[$i]->getCategoryid();
@@ -68,7 +69,7 @@ class Category_model extends CI_Model
             $data[$i]->status = $allCategory[$i]->getStatus();
             $data[$i]->pseudoSubscriptionCount = $allCategory[$i]->getPseudosubscriptioncount();
             
-            $data[$i]->subscribed = in_array($myDeals[$i]->getId(), getSubscribedCategoryIds($userId));
+            $data[$i]->subscribed = in_array($allCategory[$i]->getId(), self::getSubscribedCategoryIds($userId));
         }
         
         if(isset($data) && count($data) > 0)
@@ -80,7 +81,10 @@ class Category_model extends CI_Model
     public function CreateSubscription($userId, $categoryId){
         $subscription = new Entities\Subscriptions;
         
-        $subscription->setUserid($userId);
+        $user = $this->doctrine->em->getRepository('Entities\User')->find($userId);
+        var_dump($user);
+        $subscription->setUserid($user);
+        //$subscription->setUserid($user->getId());
         $subscription->setCategoryid($categoryId);
         
         date_default_timezone_set("Asia/Kolkata");
@@ -98,8 +102,7 @@ class Category_model extends CI_Model
         }
     }
     
-    public function UpdateCategory($updateFields, $categoryId)
-    {
+    public function UpdateCategory($updateFields, $categoryId){
         $user = new Entities\Category;
         try
         {
