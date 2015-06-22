@@ -15,8 +15,7 @@ class User_model extends CI_Model
         $this->em = $this->doctrine->em;
     }
     
-    public function CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus)
-    {
+    public function CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus){
         $user = new Entities\User;
         
         $user->setGcmid($GCMID);
@@ -27,7 +26,7 @@ class User_model extends CI_Model
         $user->setCountry($country);
         $user->setCity($city);
         $user->setPassword(crypt($password, strlen($email)));
-        $user->setFbstatus($fbStatustatus);
+        $user->setFbstatus($fbStatus);
         
         try
         {

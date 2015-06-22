@@ -88,7 +88,7 @@ class User extends CI_Controller
             exit;
         }
         
-        $this->load->model('UserModel');
-        echo json_encode($this->Login($email, $password));
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->Login($email, $password));
     }
 }
