@@ -19,14 +19,13 @@ class Category_model extends CI_Model
     private function getSubscribedCategoryIds($userId)
     {
         $subscribedCategories =  $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(array('userid' => $userId));
-        if(!is_array($subscribedCategories))
-            return null;
+        if(!is_array($subscribedCategories) || empty($subscribedCategories))
+            return array();
         $categoryIds = array();
         for($i = 0; $i < count($subscribedCategories); $i++)
         {
-            $categoryIds[$i] = $subscribedCategories[$i]->getCategoryid();
+            $categoryIds[$i] = $subscribedCategories[$i]->getCategoryid()->getId();
         }
-        
         return $categoryIds;
     }
     //---------------------
@@ -56,6 +55,9 @@ class Category_model extends CI_Model
     
     
     public function ReadAllCategory($userId){
+        if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
+        
         $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
         
         for($i = 0; $i < count($allCategory); $i++)
@@ -78,27 +80,57 @@ class Category_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
-    public function CreateSubscription($userId, $categoryId){
-        var_dump(json_decode($categoryId));exit;
-        $subscription = new Entities\Subscriptions;
+    public function UpdateSubscription($userId,  $toSubscribe, $toUnSubscribe){
+        if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
         
-        $user = $this->doctrine->em->getRepository('Entities\User')->find($userId);
-        $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
-        
-        $subscription->setUserid($user);
-        $subscription->setCategoryid($category);
-        $subscription->setSubscribedon(new \DateTime("now"));
-        
-        try
+        $categoryIds = self::getSubscribedCategoryIds($userId);
+
+        foreach($toSubscribe as $category)
         {
-            $this->em->persist($subscription);
-            $this->em->flush();
-            return array("status" => "success", "data" => array("Category Subscribed Successfully."));
+            if($categoryIds != NULL && in_array($category, $categoryIds))
+                continue;
+            else
+            {
+                $subscription = new Entities\Subscriptions;
+                
+                try
+                {
+                    $subscription->setUserid($user);
+                    $subscription->setCategoryid($this->doctrine->em->getRepository('Entities\Category')->find($category));
+                    $subscription->setSubscribedon(new \DateTime("now"));
+                    
+                    $this->em->persist($subscription);
+                    $this->em->flush();
+                }
+                catch(Exception $exc)
+                {
+                    return array("status" => "error", "message" => array("Title" => "Error Occured While Subscribing", "Code" => "401"));
+                }
+            }
         }
-        catch(Exception $exc)
+        
+        $categoryIds = self::getSubscribedCategoryIds($userId);
+        if(!empty($categoryIds))  //no deletion if subscription array is empty
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
+            foreach($toUnSubscribe as $category)
+            {
+                if(in_array($category, $categoryIds))
+                {
+                    try
+                    {
+                        $this->doctrine->em->remove($this->doctrine->em->getRepository('Entities\Subscriptions')
+                                ->findOneBy(array("userid" => $userId, "categoryid" => $category)));
+                        $this->doctrine->em->flush();
+                    }
+                    catch(Exception $exc)
+                    {
+                        return array("status" => "error", "message" => array("Title" => "Error Occured While Unsubscribing", "Code" => "401"));
+                    }
+                }
+            }
         }
+        return array("status" => "success", "data" => array("Category Subscribed Successfully."));
     }
     
     public function UpdateCategory($updateFields, $categoryId){

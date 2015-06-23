@@ -60,7 +60,7 @@ class Category extends CI_Controller
     public function Subscribe(){
         if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
         {
-            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID. $userId", "Code" => "400")));
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
             exit;
         }
         
@@ -69,11 +69,27 @@ class Category extends CI_Controller
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
             exit;
         }*/
-        
-        $categoryId = $_POST['categoryId'];
-        
-        $this->load->model('Category_model');
-        echo json_encode($this->Category_model->CreateSubscription($userId, $categoryId));
+        if(isset($_POST['toSubscribe']) && isset($_POST['toUnSubscribe']))
+        {
+            $this->load->model('Category_model');
+            
+            if($_POST['toSubscribe'] != "")
+                $toSubscribe = array_map('intval', explode(',', $_POST['toSubscribe']));
+            else
+                $toSubscribe = array();
+            
+            if($_POST['toUnSubscribe'] != "")
+                $toUnSubscribe = array_map('intval', explode(',', $_POST['toUnSubscribe']));
+            else
+                $toUnSubscribe = array();
+            
+            if((count($toSubscribe) + count($toUnSubscribe)) > 0)
+                echo json_encode($this->Category_model->UpdateSubscription($userId, $toSubscribe, $toUnSubscribe));
+            else
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Either Subscribe or Unsubscribe ID must be mentioned.", "Code" => "400")));
+        }
+        else
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Category IDs Not Found", "Code" => "400")));
     }
     
     public function Update(){
