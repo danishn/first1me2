@@ -64,24 +64,32 @@ class Deals_model extends CI_Model
     }
     
     public function ReadUserDeals($userId){   
+        if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
+        
         $mySubscriptions = $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(
-                array('userId' => $userId)
+                array('userid' => $userId)
                 );
         
-        $i = 0;
-        foreach($mySubscriptions as $subscription)
-        {
-            $myDeals[$i++] = $this->doctrine->em->getRepository('Entities\Deals')->findBy(
-                array('categoryId' => $subscription->getCategoryid())
-                );
-        }
+        if($mySubscriptions == NULL)
+            return array("status" => "error", "message" => array("Title" => "Please subscribe atleast one Category first.", "Code" => "503"));
+        
+        //var_dump(count($this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => 1))));exit;
+        
+        for($i = 0; $i < count($mySubscriptions); $i++)
+            $myDeals[$i] = $this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => $mySubscriptions[$i]->getCategoryid()->getId()));
+        
+        if(is_array($myDeals) && empty($myDeals))
+            return array("status" => "error", "message" => array("Title" => "No Deals Found.", "Code" => "404"));
         
         for($i = 0; $i < count($myDeals); $i++)
         {
+            //myDeals contains Array(may be empty) of Deals of each category, so iterate again for each element of $myDeals Array
+            
             $data[$i] = new stdClass();
             
             $data[$i]->id = $myDeals[$i]->getId();
-            $data[$i]->categoryId = $myDeals[$i]->getCategoryid();
+            $data[$i]->categoryId = $myDeals[$i]->getCategoryid()->getId();
             $data[$i]->vendorId = $myDeals[$i]->getVendorid();
             $data[$i]->createdOn = $myDeals[$i]->getCreatedon();
             $data[$i]->thumbnailImg = $myDeals[$i]->getThumbnailimg();
