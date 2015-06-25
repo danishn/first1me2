@@ -27,7 +27,7 @@ class Deals_model extends CI_Model
             return array();
         for($i = 0; $i < count($seenDeals); $i++)
         {
-            $dealIds[$i] = $seenDeals[$i]->getDealid();
+            $dealIds[$i] = $seenDeals[$i]->getDealid()->getId();
         }
         
         return $dealIds;
