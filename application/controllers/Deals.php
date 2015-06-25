@@ -17,7 +17,7 @@ class Deals extends CI_Controller
     public function Add(){
         if(isset($_SESSION['vendorId']) && ($vendorId = $_SESSION['vendorId']) != "")
         {
-            if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? trim($_POST['categoryId']) : "") == 0)
+            if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
                 exit;
@@ -72,12 +72,29 @@ class Deals extends CI_Controller
     }
     
     public function GetMyDeals(){
-        if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? trim($_POST['userId']) : "") == 0)
+        if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
             exit;
         }
         $this->load->model('Deals_model');
-        return json_encode($this->Deals_model->ReadUserDeals($userId));
+        echo json_encode($this->Deals_model->ReadUserDeals($userId));
+    }
+    
+    public function MarkAsSeen(){
+        if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
+            exit;
+        }
+        
+        if(preg_match("/[0-9]{1,10}/", $dealId = isset($_POST['dealId']) ? intval(trim($_POST['dealId'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal ID.", "Code" => "400")));
+            exit;
+        }
+        
+        $this->load->model('Deals_model');
+        echo json_encode($this->Deals_model->UpdateSeen($userId, $dealId));
     }
 }
