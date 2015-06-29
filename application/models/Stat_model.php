@@ -50,10 +50,27 @@ class Stat_model extends CI_Model
         if($allUser == NULL)
             return array("status" => "error", "message" => array("Title" => "No registered user found.", "Code" => "503"));
         
-        for($i = 0; $i < count($allUser); $i++){
-            $stat[$i] = new stdClass();
-            $stat[$i]->totalUser = count($allUser);
-            //$stat[$i]->totalFavourite = ;
+        $stat = new stdClass();
+        $stat->totalUser = count($allUser);
+        $stat->users = array();
+        for($i = 0, $totalShare = 0, $user = new stdClass(); $i < count($allUser); $totalShare = 0, $i++)
+        {
+            $totalShare += intval($allUser[$i]->getFbstatus());
+            
+            $user->id = $allUser[$i]->getID();
+            $user->firstName = $allUser[$i]->getFirstname();
+            $user->lastName = $allUser[$i]->getLastname();
+            $user->city = $allUser[$i]->getCity();
+            $user->subscribed = count($this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(array("userid" => $allUser[$i]->getID())));
+            
+            $stat->users[$i] = $user;
         }
+        $stat->totalShare = $totalShare;
+        
+        return array("status" => "success", "data" => $stat);
+    }
+    
+    public function ReadDealsStat(){
+        $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
     }
 }

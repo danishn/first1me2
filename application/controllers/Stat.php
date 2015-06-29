@@ -28,4 +28,8 @@ class Stat extends CI_Controller
     public function User(){
         echo json_encode($this->Stat_model->ReadUserStat());
     }
+    
+    public function Deals(){
+        echo json_encode($this->Stat_model->ReadDealsStat());
+    }
 }
