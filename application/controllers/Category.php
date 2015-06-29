@@ -150,4 +150,16 @@ class Category extends CI_Controller
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Filure.", "Code" => "401")));
         }
     }
+    
+    public function GetStat(){
+        //if(isset($_SESSION['adminId']) && $_SESSION['adminId'] != "")
+        //{
+            $this->load->model('Category_model');
+            echo json_encode($this->Category_model->ReadStat());
+        /*}
+        else
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Filure.", "Code" => "401")));
+        }*/
+    }
 }
