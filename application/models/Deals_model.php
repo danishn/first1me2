@@ -126,35 +126,39 @@ class Deals_model extends CI_Model
         //implement - mark as seen + view count for each deal
         
         //incrementing view count
-        $theDeal = $this->doctrine->em->getRepository('Entities\Deals')->find($dealId);
-        $currentView = $theDeal->getViews();
+        //$theDeal = $this->doctrine->em->getRepository('Entities\Deals')->find($dealId);
+        $currentView = $deal->getViews();
         try
         {
             $this->db->update('deals', array("views" => ++$currentView), array("id" => $dealId));
         }
         catch(Exception $exc)
         {
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
+            return array("status" => "error", "message" => array("Title" => "increment ".$exc->getTraceAsString(), "Code" => "503"));
         }
         
         //implementing mark as seen
-        $seen = new Entities\Seen;
-        try
+        if($this->doctrine->em->getRepository('Entities\Seen')->findOneBy(array("userid" => $userId, "dealid" => $dealId)) == NULL)
         {
-            $seen->setUserid($user);
-            $seen->setDealid($deal);
-            $seen->setFavourite(0);
-            $seen->setRating(0);
-            //$seen->setDealid($this->doctrine->em->getRepository('Entities\Deals')->find($category));
-            
-            $this->em->persist($seen);
-            $this->em->flush();
-        }
-        catch(Exception $exc)
-        {
-            return array("status" => "error", "message" => array("Title" => "Error Occured While Marking as Seen Deal.", "Code" => "401"));
+            $seen = new Entities\Seen;
+            try
+            {
+                $seen->setUserid($user);
+                $seen->setDealid($deal);
+                $seen->setFavourite(0);
+                $seen->setRating(0);
+                //$seen->setDealid($this->doctrine->em->getRepository('Entities\Deals')->find($category));
+
+                $this->em->persist($seen);
+                $this->em->flush();
+            }
+            catch(Exception $exc)
+            {
+                return array("status" => "error", "message" => array("Title" => "Error Occured While Marking as Seen Deal.\n" . $exc->getTraceAsString(), "Code" => "401"));
+                //return array("status" => "success", "data" => array("Deal Marked as Seen."));
+            }
         }
         
-        return array("status" => "success", "data" => array("Deal Marked as Seen."));
+        return array("status" => "success", "data" => array("Deal Seen Updated."));
     }
 }
