@@ -107,12 +107,12 @@ class Category extends CI_Controller
                     $updateFields["displayName"] = $displayName;
                 }
 
-                if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\s\\\]{1,255}/", $shortDesc = isset($_POST['shortDesc']) ? trim($_POST['shortDesc']) : "") != 0)
+                if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,255}/", $shortDesc = isset($_POST['shortDesc']) ? trim($_POST['shortDesc']) : "") != 0)
                 {
                     $updateFields["shortDesc"] = $shortDesc;
                 }
 
-                if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\s\\\]{1,}/", $longDesc = isset($_POST['longDesc']) ? trim($_POST['longDesc']) : "") != 0)
+                if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,}/", $longDesc = isset($_POST['longDesc']) ? trim($_POST['longDesc']) : "") != 0)
                 {
                     $updateFields["longDesc"] = $longDesc;
                 }
@@ -149,17 +149,5 @@ class Category extends CI_Controller
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Filure.", "Code" => "401")));
         }
-    }
-    
-    public function GetStat(){
-        //if(isset($_SESSION['adminId']) && $_SESSION['adminId'] != "")
-        //{
-            $this->load->model('Category_model');
-            echo json_encode($this->Category_model->ReadStat());
-        /*}
-        else
-        {
-            echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Filure.", "Code" => "401")));
-        }*/
     }
 }

@@ -161,4 +161,26 @@ class Deals_model extends CI_Model
         
         return array("status" => "success", "data" => array("Deal Seen Updated."));
     }
+    
+    public function UpdateFavourite($userId, $dealId, $favourite){
+        if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
+        
+        if(($deal = $this->doctrine->em->getRepository('Entities\Deals')->find($dealId)) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Invalid Deal ID.", "Code" => "503"));
+        
+        if(($seen = $this->doctrine->em->getRepository('Entities\Seen')->findOneBy(array("userid" => $userId, "dealid" => $dealId))) == NULL)
+            return array("status" => "error", "message" => array("Title" => "Deal not seen yet.", "Code" => "503"));
+        
+        try
+        {
+            $this->db->update('seen', array("favourite" => $favourite), array("userid" => $userId, "dealid" => $dealId));
+        }
+        catch(Exception $exc)
+        {
+            return array("status" => "error", "message" => array("Title" => "Error while adding to favourite.", "Code" => "503"));
+        }
+        
+        return array("status" => "success", "data" => array("Deal Favourite Status Updated."));
+    }
 }
