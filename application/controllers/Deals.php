@@ -41,13 +41,13 @@ class Deals extends CI_Controller
                 exit;
             }
 
-            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\s\\\]{1,255}/", $shortDesc = isset($_POST['shortDesc']) ? trim($_POST['shortDesc']) : "") == 0)
+            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,255}/", $shortDesc = isset($_POST['shortDesc']) ? trim($_POST['shortDesc']) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Short Description.", "Code" => "400")));
                 exit;
             }
 
-            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\s\\\]{1,}/", $longDesc = isset($_POST['longDesc']) ? trim($_POST['longDesc']) : "") == 0)
+            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,}/", $longDesc = isset($_POST['longDesc']) ? trim($_POST['longDesc']) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Long Description.", "Code" => "400")));
                 exit;
@@ -96,5 +96,28 @@ class Deals extends CI_Controller
         
         $this->load->model('Deals_model');
         echo json_encode($this->Deals_model->UpdateSeen($userId, $dealId));
+    }
+    
+    public function AddToFavourite(){
+        if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "400")));
+            exit;
+        }
+        
+        if(preg_match("/[0-9]{1,10}/", $dealId = isset($_POST['dealId']) ? intval(trim($_POST['dealId'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal ID.", "Code" => "400")));
+            exit;
+        }
+        
+        if(preg_match("/[0-9]{1}/", $favourite = isset($_POST['favourite']) ? intval(trim($_POST['favourite'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid favourte instruciton.", "Code" => "400")));
+            exit;
+        }
+        
+        $this->load->model('Deals_model');
+        echo json_encode($this->Deals_model->UpdateFavourite($userId, $dealId, $favourite));
     }
 }

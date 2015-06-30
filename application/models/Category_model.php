@@ -146,8 +146,7 @@ class Category_model extends CI_Model
         }
     }
     
-    public function DeleteCategory($categoryId)
-    {
+    public function DeleteCategory($categoryId){
         try
         {
             $category = $this->doctrine->em->getRepository('Entities\Category')->find($categoryId);
@@ -158,30 +157,5 @@ class Category_model extends CI_Model
         {
             return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
-    }
-    
-    public function ReadStat(){
-        $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
-        $stat = array();
-        $totalViews = 0;
-        
-        for($i = 0; $i < count($allCategory); $i++){
-            $stat[$i] = new stdClass();
-            $stat[$i]->id = $allCategory[$i]->getId();
-            $stat[$i]->displayName = $allCategory[$i]->getDisplayname();
-            $stat[$i]->createdOn = $allCategory[$i]->getCreatedon();
-            
-            $stat[$i]->subscribed = count($this->doctrine->em->getRepository('Entities\Category')->find($allCategory[$i]));
-            
-            /*$allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findBy(array("catgoryid" => $allCategory[$i]->getId()));
-            $stat[$i]->deals = count($allDeals);
-            for($j = 0; $j < count($allDeals); $j++)
-                $totalViews += $allDeals[$j]->getView();
-            $stat[$i]->totalViews = $totalViews;*/
-            
-            $stat[$i]->status = $allCategory[$i]->getStatus();
-        }
-        
-        return array("status" => "success", "data" => array($stat));
     }
 }
