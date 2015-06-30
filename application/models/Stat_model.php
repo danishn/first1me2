@@ -72,5 +72,8 @@ class Stat_model extends CI_Model
     
     public function ReadDealsStat(){
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
+        
+        $stat = new stdClass();
+        $stat->totalUser = count($allDeals);
     }
 }
