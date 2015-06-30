@@ -73,7 +73,28 @@ class Stat_model extends CI_Model
     public function ReadDealsStat(){
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         
+        $activDeals = 0;
         $stat = new stdClass();
-        $stat->totalUser = count($allDeals);
+        $stat->totalDeals = count($allDeals);
+        
+        $stat->deals = array();
+        for($i = 0; $i < count($allDeals); $i++){
+            $deal = new stdClass();
+            
+            $deal->id = $allDeals[$i]->getId();
+            $deal->thumbnailImg = $allDeals[$i]->getThumbnailimg();
+            $deal->shortDesc = $allDeals[$i]->getShortdesc();
+            $deal->region = $allDeals[$i]->getRegion();
+            $deal->views = $allDeals[$i]->getViews();
+            
+            if($allDeals[$i]->getStatus() == 1 && $allDeals[$i]->getExpireson()->diff(date("Y-m-d H:i:s")) > 0)
+                ++$activDeals;
+            
+            $deal->expiresOn = $allDeals[$i]->getExpireson();
+            
+            $stat->deals[$i] = $deal;
+        }
+        $stat->active = $activDeals;
+        return array("status" => "success", "data" => $stat);
     }
 }
