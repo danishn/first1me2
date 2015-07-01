@@ -69,7 +69,7 @@ class Subscriptions
     public function setSubscribedon($subscribedon)
     {
         $this->subscribedon = $subscribedon;
-
+    
         return $this;
     }
 
@@ -93,7 +93,7 @@ class Subscriptions
     public function setUserid(\Entities\User $userid = null)
     {
         $this->userid = $userid;
-
+    
         return $this;
     }
 
@@ -117,7 +117,7 @@ class Subscriptions
     public function setCategoryid(\Entities\Category $categoryid = null)
     {
         $this->categoryid = $categoryid;
-
+    
         return $this;
     }
 

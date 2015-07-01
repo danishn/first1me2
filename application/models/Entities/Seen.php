@@ -76,7 +76,7 @@ class Seen
     public function setFavourite($favourite)
     {
         $this->favourite = $favourite;
-
+    
         return $this;
     }
 
@@ -100,7 +100,7 @@ class Seen
     public function setRating($rating)
     {
         $this->rating = $rating;
-
+    
         return $this;
     }
 
@@ -124,7 +124,7 @@ class Seen
     public function setUserid(\Entities\User $userid = null)
     {
         $this->userid = $userid;
-
+    
         return $this;
     }
 
@@ -148,7 +148,7 @@ class Seen
     public function setDealid(\Entities\Deals $dealid = null)
     {
         $this->dealid = $dealid;
-
+    
         return $this;
     }
 

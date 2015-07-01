@@ -60,6 +60,8 @@ class Stat_model extends CI_Model
             $user->id = $allUser[$i]->getID();
             $user->firstName = $allUser[$i]->getFirstname();
             $user->lastName = $allUser[$i]->getLastname();
+            $user->mobile = $allUser[$i]->getMobile();
+            $user->os = $allUser[$i]->getOs();
             $user->city = $allUser[$i]->getCity();
             $user->subscribed = count($this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(array("userid" => $allUser[$i]->getID())));
             
