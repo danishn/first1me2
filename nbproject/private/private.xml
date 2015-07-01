@@ -8,26 +8,11 @@
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Deals_model.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Entities/User.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Category_model.php</file>
+            <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Entities/Deals.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/controllers/Stat.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/User_model.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Stat_model.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/controllers/Deals.php</file>
-<<<<<<< HEAD
-=======
-=======
-            <file>file:/C:/xampp/htdocs/first1me2/application/controllers/Admin.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/controllers/Deals.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/Entities/Deals.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/controllers/Category.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/Entities/Seen.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/Deals_model.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/config/database.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/User_model.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/Entities/Category.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/models/Category_model.php</file>
-            <file>file:/C:/xampp/htdocs/first1me2/application/controllers/User.php</file>
->>>>>>> c9dcc7f2aab02a6edd0d81c9367b67d76a6bb328
->>>>>>> 557f11f8fc1523c2dea2278b771cf2fc28ec824f
         </group>
     </open-files>
 </project-private>

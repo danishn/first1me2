@@ -87,7 +87,9 @@ class Stat_model extends CI_Model
             $deal->region = $allDeals[$i]->getRegion();
             $deal->views = $allDeals[$i]->getViews();
             
-            if($allDeals[$i]->getStatus() == 1 && $allDeals[$i]->getExpireson()->diff(date("Y-m-d H:i:s")) > 0)
+            $interval = strtotime($allDeals[$i]->getExpireson()->format('Y-m-d H:i:s')) - strtotime(date("Y-m-d H:i:s"));
+            //echo "\nExpires " . $allDeals[$i]->getExpireson() . "\n" . $interval . "\n";
+            if($allDeals[$i]->getStatus() == 1 && $interval > 0)
                 ++$activDeals;
             
             $deal->expiresOn = $allDeals[$i]->getExpireson();
