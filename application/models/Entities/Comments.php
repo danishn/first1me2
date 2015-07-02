@@ -69,7 +69,7 @@ class Comments
     public function setCommentedon($commentedon)
     {
         $this->commentedon = $commentedon;
-
+    
         return $this;
     }
 
@@ -93,7 +93,7 @@ class Comments
     public function setUserid(\Entities\User $userid = null)
     {
         $this->userid = $userid;
-
+    
         return $this;
     }
 
@@ -117,7 +117,7 @@ class Comments
     public function setDealid(\Entities\Deals $dealid = null)
     {
         $this->dealid = $dealid;
-
+    
         return $this;
     }
 

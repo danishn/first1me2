@@ -77,7 +77,7 @@ class Vendor
     public function setEmail($email)
     {
         $this->email = $email;
-
+    
         return $this;
     }
 
@@ -101,7 +101,7 @@ class Vendor
     public function setUsername($username)
     {
         $this->username = $username;
-
+    
         return $this;
     }
 
@@ -125,7 +125,7 @@ class Vendor
     public function setPassword($password)
     {
         $this->password = $password;
-
+    
         return $this;
     }
 
@@ -149,7 +149,7 @@ class Vendor
     public function setLastlogin($lastlogin)
     {
         $this->lastlogin = $lastlogin;
-
+    
         return $this;
     }
 
@@ -173,7 +173,7 @@ class Vendor
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 

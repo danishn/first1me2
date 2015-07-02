@@ -57,11 +57,17 @@ class User extends CI_Controller
             exit;
         }
         
-        $GCMID = isset($_POST['GCMID']) ? $_POST['GCMID'] : "-";    //later this field will be mandatory
+        if(preg_match("/[a-zA-Z0-9\s\.\,\-\+\/\\\]{1,20}/", $os = isset($_POST['os']) ? trim($_POST['os']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Operating System.", "Code" => "400")));
+            exit;
+        }
+        
+        $token = isset($_POST['token']) ? $_POST['token'] : "-";    //later this field will be mandatory
         $fbStatus = 0;
         
         $this->load->model('User_model');
-        echo json_encode($this->User_model->CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
+        echo json_encode($this->User_model->CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
     }
     
     public function FacebookShare(){
