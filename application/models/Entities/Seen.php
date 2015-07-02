@@ -162,3 +162,4 @@ class Seen
         return $this->dealid;
     }
 }
+

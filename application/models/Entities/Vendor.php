@@ -187,3 +187,4 @@ class Vendor
         return $this->name;
     }
 }
+

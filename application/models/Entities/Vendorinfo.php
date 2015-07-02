@@ -204,3 +204,4 @@ class Vendorinfo
         return $this->vendorid;
     }
 }
+

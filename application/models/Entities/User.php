@@ -66,7 +66,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=20, nullable=false)
+     * @ORM\Column(name="country", type="string", length=10, nullable=false)
      */
     private $country;
 
@@ -341,66 +341,5 @@ class User
     {
         return $this->fbstatus;
     }
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="os", type="string", length=20, nullable=false)
-     */
-    private $os;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=160, nullable=false)
-     */
-    private $token;
-
-
-    /**
-     * Set os
-     *
-     * @param string $os
-     *
-     * @return User
-     */
-    public function setOs($os)
-    {
-        $this->os = $os;
-    
-        return $this;
-    }
-
-    /**
-     * Get os
-     *
-     * @return string
-     */
-    public function getOs()
-    {
-        return $this->os;
-    }
-
-    /**
-     * Set token
-     *
-     * @param string $token
-     *
-     * @return User
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-    
-        return $this;
-    }
-
-    /**
-     * Get token
-     *
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
 }
+

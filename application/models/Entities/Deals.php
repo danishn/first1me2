@@ -441,3 +441,4 @@ class Deals
         return $this->vendorid;
     }
 }
+
