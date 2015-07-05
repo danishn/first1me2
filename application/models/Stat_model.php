@@ -51,7 +51,7 @@ class Stat_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => "No registered user found.", "Code" => "503"));
         
         $stat = new stdClass();
-        $stat->totalUser = count($allUser);
+        //$stat->totalUser = count($allUser);
         $stat->users = array();
         for($i = 0, $totalShare = 0; $i < count($allUser); $totalShare = 0, $i++)
         {
@@ -78,7 +78,7 @@ class Stat_model extends CI_Model
         
         $activDeals = 0;
         $stat = new stdClass();
-        $stat->totalDeals = count($allDeals);
+        //$stat->totalDeals = count($allDeals);
         
         $stat->deals = array();
         for($i = 0; $i < count($allDeals); $i++){
@@ -96,10 +96,44 @@ class Stat_model extends CI_Model
                 ++$activDeals;
             
             $deal->expiresOn = $allDeals[$i]->getExpireson();
+            $deal->status = $allDeals[$i]->getStatus();
             
             $stat->deals[$i] = $deal;
         }
         $stat->active = $activDeals;
+        return array("status" => "success", "data" => $stat);
+    }
+    
+    public function ReadVendorStat(){
+        $allVendors = $this->doctrine->em->getRepository('Entities\Vendor')->findAll();
+        
+        $stat = new stdClass();
+        $stat->vendors = array();
+        for($i = 0; $i < count($allVendors); $i++){
+            $vendor = new stdClass();
+            $thisVendor = $this->doctrine->em->getRepository('Entities\Vendorinfo')->find($allVendors[$i]);
+            $vendor->id = $allVendors[$i]->getId();
+            $vendor->firstName = $thisVendor->getFirstname();
+            $vendor->lastName = $thisVendor->getLastname();
+            $vendor->businessTitle = $thisVendor->getBusinesstitle();
+            $vendor->registeredOn = $thisVendor->getRegisteredon();
+            
+            $deals = $this->doctrine->em->getRepository('Entities\Deals')->findBy(array("vendorid" => $allVendors[$i]));
+            $vendor->totalDeals = $deals == NULL ? 0 : count($deals);
+            
+            $totalViews = 0;
+            $categories = array();
+            foreach($deals as $deal){
+                $totalViews += $deal->getViews();
+                if(!in_array($deal->getCategoryid()->getId(), $categories))
+                        $categories[] = $deal->getCategoryid()->getId();
+            }
+            
+            $vendor->totalCategories = count($categories);
+            $vendor->totalViews = $totalViews;
+            
+            $stat->vendors[$i] = $vendor;
+        }
         return array("status" => "success", "data" => $stat);
     }
 }
