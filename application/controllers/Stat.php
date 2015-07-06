@@ -32,4 +32,8 @@ class Stat extends CI_Controller
     public function Deals(){
         echo json_encode($this->Stat_model->ReadDealsStat());
     }
+    
+    public function Vendor(){
+        echo json_encode($this->Stat_model->ReadVendorStat());
+    }
 }
