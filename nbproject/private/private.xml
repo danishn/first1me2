@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/controllers/Admin.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/controllers/Category.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Deals_model.php</file>
@@ -11,6 +12,10 @@
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/User_model.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/models/Stat_model.php</file>
             <file>file:/D:/Program_Files/xampp/htdocs/first1me2/application/controllers/Deals.php</file>
+=======
+            <file>file:/C:/xampp/htdocs/first1me2/application/controllers/Stat.php</file>
+            <file>file:/C:/xampp/htdocs/first1me2/application/models/Stat_model.php</file>
+>>>>>>> 135b7947bd40aa79213e18604852e962635862b8
         </group>
     </open-files>
 </project-private>

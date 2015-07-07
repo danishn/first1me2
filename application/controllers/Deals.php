@@ -15,8 +15,8 @@ class Deals extends CI_Controller
     }
     
     public function Add(){
-        if(isset($_SESSION['vendorId']) && ($vendorId = $_SESSION['vendorId']) != "")
-        {
+        /*if(isset($_SESSION['vendorId']) && ($vendorId = $_SESSION['vendorId']) != "")
+        {*/
             if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
@@ -66,9 +66,9 @@ class Deals extends CI_Controller
 
             $this->load->model('Deals_model');
             echo json_encode($this->Deals_model->CreateDeals($categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
-        }
+        /*}
         else
-            echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
     }
     
     public function GetMyDeals(){
