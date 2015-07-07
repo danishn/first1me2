@@ -36,4 +36,12 @@ class Stat extends CI_Controller
     public function Vendor(){
         echo json_encode($this->Stat_model->ReadVendorStat());
     }
+    
+    public function DashBoard(){
+        echo json_encode($this->Stat_model->ReadDashBoardStat());
+    }
+    
+    public function Test(){
+        echo "hello";
+    }
 }

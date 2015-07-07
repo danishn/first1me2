@@ -136,4 +136,20 @@ class Stat_model extends CI_Model
         }
         return array("status" => "success", "data" => $stat);
     }
+    
+    public function ReadDashBoardStat(){
+        $allUser = $this->doctrine->em->getRepository('Entities\User')->findAll();
+        $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
+        $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
+        $allVendors = $this->doctrine->em->getRepository('Entities\Vendor')->findAll();
+        
+        $data = new stdClass();
+        
+        $data->totalUser = $allUser == NULL ? 0 : count($allUser);
+        $data->totalCategory = $allCategory == NULL ? 0 : count($allCategory);
+        $data->totalDeal = $allDeals == NULL ? 0 : count($allDeals);
+        $data->totalVendor = $allVendors == NULL ? 0 : count($allVendors);
+        
+        return array("status" => "success", "data" => $data);
+    }
 }
