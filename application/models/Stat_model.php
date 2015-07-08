@@ -53,9 +53,9 @@ class Stat_model extends CI_Model
         $stat = new stdClass();
         //$stat->totalUser = count($allUser);
         $stat->users = array();
-        for($i = 0, $totalShare = 0; $i < count($allUser); $totalShare = 0, $i++)
+        for($i = 0; $i < count($allUser); $i++)
         {
-            $totalShare += intval($allUser[$i]->getFbstatus());
+            //$totalShare += intval($allUser[$i]->getFbstatus());
             
             $user = new stdClass();
             $user->id = $allUser[$i]->getID();
@@ -68,7 +68,7 @@ class Stat_model extends CI_Model
             
             $stat->users[$i] = $user;
         }
-        $stat->totalShare = $totalShare;
+        //$stat->totalShare = $totalShare;
         
         return array("status" => "success", "data" => $stat);
     }
@@ -143,12 +143,23 @@ class Stat_model extends CI_Model
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         $allVendors = $this->doctrine->em->getRepository('Entities\Vendor')->findAll();
         
+        $totalShare = 0;
+        $totalAndroid = 0;
+        $totalIos = 0;
+        foreach($allUser as $user){
+            $totalShare += intval($user->getFbstatus());
+            stristr($user->getOs(), "android") != FALSE ? ++$totalAndroid : ++$totalIos;
+        }
+        
         $data = new stdClass();
         
         $data->totalUser = $allUser == NULL ? 0 : count($allUser);
         $data->totalCategory = $allCategory == NULL ? 0 : count($allCategory);
         $data->totalDeal = $allDeals == NULL ? 0 : count($allDeals);
         $data->totalVendor = $allVendors == NULL ? 0 : count($allVendors);
+        $data->totalShare = $totalShare;
+        $data->totalAndroid = $totalAndroid;
+        $data->totalIos = $totalIos;
         
         return array("status" => "success", "data" => $data);
     }
