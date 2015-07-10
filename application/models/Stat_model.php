@@ -44,7 +44,7 @@ class Stat_model extends CI_Model
         return array("status" => "success", "data" => $stat);
     }
     
-    public function ReadUserStat(){
+    public function ReadUserStat($start){
         $allUser = $this->doctrine->em->getRepository('Entities\User')->findAll();
         
         if($allUser == NULL)
@@ -73,7 +73,7 @@ class Stat_model extends CI_Model
         return array("status" => "success", "data" => $stat);
     }
     
-    public function ReadDealsStat(){
+    public function ReadDealsStat($start){
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         
         $activDeals = 0;
