@@ -139,10 +139,11 @@ class Stat_model extends CI_Model
     
     public function ReadDashBoardStat(){
         $allUser = $this->doctrine->em->getRepository('Entities\User')->findAll();
-        $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
+		$allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         $allVendors = $this->doctrine->em->getRepository('Entities\Vendor')->findAll();
         
+//        var_dump($allUser);exit;
         $totalShare = 0;
         $totalAndroid = 0;
         $totalIos = 0;
@@ -160,6 +161,7 @@ class Stat_model extends CI_Model
         $data->totalShare = $totalShare;
         $data->totalAndroid = $totalAndroid;
         $data->totalIos = $totalIos;
+		
         
         return array("status" => "success", "data" => $data);
     }

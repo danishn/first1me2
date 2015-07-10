@@ -70,7 +70,7 @@ class Vendorinfo
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
-    
+
         return $this;
     }
 
@@ -94,7 +94,7 @@ class Vendorinfo
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
-    
+
         return $this;
     }
 
@@ -118,7 +118,7 @@ class Vendorinfo
     public function setBusinesstitle($businesstitle)
     {
         $this->businesstitle = $businesstitle;
-    
+
         return $this;
     }
 
@@ -142,7 +142,7 @@ class Vendorinfo
     public function setDesc($desc)
     {
         $this->desc = $desc;
-    
+
         return $this;
     }
 
@@ -166,7 +166,7 @@ class Vendorinfo
     public function setRegisteredon($registeredon)
     {
         $this->registeredon = $registeredon;
-    
+
         return $this;
     }
 
@@ -190,7 +190,7 @@ class Vendorinfo
     public function setVendorid(\Entities\Vendor $vendorid)
     {
         $this->vendorid = $vendorid;
-    
+
         return $this;
     }
 

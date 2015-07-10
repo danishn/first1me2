@@ -139,7 +139,7 @@ class Deals
     public function setCreatedon($createdon)
     {
         $this->createdon = $createdon;
-    
+
         return $this;
     }
 
@@ -163,7 +163,7 @@ class Deals
     public function setThumbnailimg($thumbnailimg)
     {
         $this->thumbnailimg = $thumbnailimg;
-    
+
         return $this;
     }
 
@@ -187,7 +187,7 @@ class Deals
     public function setBigimg($bigimg)
     {
         $this->bigimg = $bigimg;
-    
+
         return $this;
     }
 
@@ -211,7 +211,7 @@ class Deals
     public function setRegion($region)
     {
         $this->region = $region;
-    
+
         return $this;
     }
 
@@ -235,7 +235,7 @@ class Deals
     public function setShortdesc($shortdesc)
     {
         $this->shortdesc = $shortdesc;
-    
+
         return $this;
     }
 
@@ -259,7 +259,7 @@ class Deals
     public function setLongdesc($longdesc)
     {
         $this->longdesc = $longdesc;
-    
+
         return $this;
     }
 
@@ -283,7 +283,7 @@ class Deals
     public function setLikes($likes)
     {
         $this->likes = $likes;
-    
+
         return $this;
     }
 
@@ -307,7 +307,7 @@ class Deals
     public function setViews($views)
     {
         $this->views = $views;
-    
+
         return $this;
     }
 
@@ -331,7 +331,7 @@ class Deals
     public function setPseudoviews($pseudoviews)
     {
         $this->pseudoviews = $pseudoviews;
-    
+
         return $this;
     }
 
@@ -355,7 +355,7 @@ class Deals
     public function setExpireson($expireson)
     {
         $this->expireson = $expireson;
-    
+
         return $this;
     }
 
@@ -379,7 +379,7 @@ class Deals
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -403,7 +403,7 @@ class Deals
     public function setCategoryid(\Entities\Category $categoryid = null)
     {
         $this->categoryid = $categoryid;
-    
+
         return $this;
     }
 
@@ -427,7 +427,7 @@ class Deals
     public function setVendorid(\Entities\Vendor $vendorid = null)
     {
         $this->vendorid = $vendorid;
-    
+
         return $this;
     }
 
