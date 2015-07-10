@@ -84,7 +84,7 @@ class Category
     public function setDisplayname($displayname)
     {
         $this->displayname = $displayname;
-    
+
         return $this;
     }
 
@@ -108,7 +108,7 @@ class Category
     public function setShortdesc($shortdesc)
     {
         $this->shortdesc = $shortdesc;
-    
+
         return $this;
     }
 
@@ -132,7 +132,7 @@ class Category
     public function setLongdesc($longdesc)
     {
         $this->longdesc = $longdesc;
-    
+
         return $this;
     }
 
@@ -156,7 +156,7 @@ class Category
     public function setCreatedon($createdon)
     {
         $this->createdon = $createdon;
-    
+
         return $this;
     }
 
@@ -180,7 +180,7 @@ class Category
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -204,7 +204,7 @@ class Category
     public function setPseudosubscriptioncount($pseudosubscriptioncount)
     {
         $this->pseudosubscriptioncount = $pseudosubscriptioncount;
-    
+
         return $this;
     }
 

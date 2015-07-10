@@ -77,7 +77,7 @@ class Admin
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
@@ -101,7 +101,7 @@ class Admin
     public function setPassword($password)
     {
         $this->password = $password;
-    
+
         return $this;
     }
 
@@ -125,7 +125,7 @@ class Admin
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
-    
+
         return $this;
     }
 
@@ -149,7 +149,7 @@ class Admin
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
-    
+
         return $this;
     }
 
@@ -173,7 +173,7 @@ class Admin
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 

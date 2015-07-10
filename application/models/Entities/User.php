@@ -112,7 +112,7 @@ class User
     public function setOs($os)
     {
         $this->os = $os;
-    
+
         return $this;
     }
 
@@ -136,7 +136,7 @@ class User
     public function setToken($token)
     {
         $this->token = $token;
-    
+
         return $this;
     }
 
@@ -160,7 +160,7 @@ class User
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
-    
+
         return $this;
     }
 
@@ -184,7 +184,7 @@ class User
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
-    
+
         return $this;
     }
 
@@ -208,7 +208,7 @@ class User
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
@@ -232,7 +232,7 @@ class User
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
-    
+
         return $this;
     }
 
@@ -256,7 +256,7 @@ class User
     public function setCountry($country)
     {
         $this->country = $country;
-    
+
         return $this;
     }
 
@@ -280,7 +280,7 @@ class User
     public function setCity($city)
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -304,7 +304,7 @@ class User
     public function setPassword($password)
     {
         $this->password = $password;
-    
+
         return $this;
     }
 
@@ -328,7 +328,7 @@ class User
     public function setFbstatus($fbstatus)
     {
         $this->fbstatus = $fbstatus;
-    
+
         return $this;
     }
 
