@@ -342,3 +342,4 @@ class User
         return $this->fbstatus;
     }
 }
+
