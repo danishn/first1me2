@@ -34,13 +34,14 @@ class Deals_model extends CI_Model
     }
     //---------------------
     
-    public function CreateDeals($categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
+    public function CreateDeals($name, $categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
         $deals = new Entities\Deals;
         
+        $deals->setName($name);
         $deals->setCategoryid($categoryId);
         $deals->setVendorid($vendorId);
         $deals->setCreatedon(new \DateTime("now"));
-        $deals->setThumbnailimg($thumbnailimg);
+        //$deals->setThumbnailimg($thumbnailimg);
         $deals->setBigimg($bigimg);
         $deals->setRegion($region);
         $deals->setShortdesc($shortdesc);
@@ -55,6 +56,33 @@ class Deals_model extends CI_Model
         {
             $this->em->persist($deals);
             $this->em->flush();
+            
+            if(isset($_FILES["thumbnailImg"]))
+            {
+                $target_path = "images/deals/" . $_FILES["thumbnailImg"]["name"];
+                $allowedExts = array("jpg", "jpeg", "png", "bmp");
+                $fileExt = explode(".", $_FILES["thumbnailImg"]["name"]);
+                if(in_array($fileExt[count($fileExt)-1], $allowedExts))
+                {
+                    if ($_FILES["thumbnailImg"]["error"] > 0)
+                    {
+                        echo "Error: " . $_FILES["thumbnailImg"]["error"];
+                    }
+                    else
+                    {
+                        if(file_exists("images/deals/" . $_FILES["thumbnailImg"]["name"]))
+                            unlink("images/deals/".$_FILES["thumbnailImg"]["name"]);
+
+                        move_uploaded_file($_FILES["thumbnailImg"]["tmp_name"], "images/deals/".$deals->getId());
+                        //move_uploaded_file($_FILES["thumbnailImg"]["tmp_name"], "images/deals/".$_FILES["thumbnailImg"]["name"]);
+                    }
+                }
+                else
+                    echo "Error : Unsupported file.";
+            }
+            else
+                echo "Error : File not found.";
+            
             return array("status" => "success", "data" => array("Deal Added Successfully."));
         }
         catch(Exception $exc)
@@ -90,6 +118,7 @@ class Deals_model extends CI_Model
                     $data[$j] = new stdClass();
 
                     $data[$j]->id = $deal->getId();
+                    $data[$j]->name = $deal->getName();
                     $data[$j]->categoryId = $deal->getCategoryid()->getId();
                     $data[$j]->vendorId = $deal->getVendorid()->getId();
                     $data[$j]->createdOn = $deal->getCreatedon();

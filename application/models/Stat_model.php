@@ -44,7 +44,7 @@ class Stat_model extends CI_Model
         return array("status" => "success", "data" => $stat);
     }
     
-    public function ReadUserStat($start){
+    public function ReadUserStat(){
         $allUser = $this->doctrine->em->getRepository('Entities\User')->findAll();
         
         if($allUser == NULL)
@@ -73,7 +73,7 @@ class Stat_model extends CI_Model
         return array("status" => "success", "data" => $stat);
     }
     
-    public function ReadDealsStat($start){
+    public function ReadDealsStat(){
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         
         $activDeals = 0;
@@ -139,18 +139,42 @@ class Stat_model extends CI_Model
     
     public function ReadDashBoardStat(){
         $allUser = $this->doctrine->em->getRepository('Entities\User')->findAll();
-		$allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
+        $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
         $allDeals = $this->doctrine->em->getRepository('Entities\Deals')->findAll();
         $allVendors = $this->doctrine->em->getRepository('Entities\Vendor')->findAll();
         
-//        var_dump($allUser);exit;
         $totalShare = 0;
         $totalAndroid = 0;
         $totalIos = 0;
+        $monthlyUser = array();
+        
+        //calculation last 6 months
+        for($i = 0, $m = date("n"), $y = date("Y"); $i <6 ; $i++){
+            $monthlyUser[$y][$m--] = 0;
+            if($m == 0){
+                $m = 12;
+                $y--;
+            }
+        }
+        $monthlyVendor = $monthlyUser;
+        
         foreach($allUser as $user){
             $totalShare += intval($user->getFbstatus());
             stristr($user->getOs(), "android") != FALSE ? ++$totalAndroid : ++$totalIos;
+            
+            //monthly registration calculation
+            if(in_array($user->getRegisteredon()->format("Y"), array_keys($monthlyUser)) && in_array($user->getRegisteredon()->format("n"), array_keys($monthlyUser[$user->getRegisteredon()->format("Y")])))
+                ++$monthlyUser[$user->getRegisteredon()->format("Y")][$user->getRegisteredon()->format("n")];
         }
+        
+        foreach($allVendors as $vendor){
+            $vendorInfo = $this->em->getRepository('Entities\Vendorinfo')->find($vendor);
+            //monthly registration calculation
+            if(in_array($vendorInfo->getRegisteredon()->format("Y"), array_keys($monthlyVendor)) && in_array($vendorInfo->getRegisteredon()->format("n"), array_keys($monthlyVendor[$vendorInfo->getRegisteredon()->format("Y")])))
+                ++$monthlyVendor[$vendorInfo->getRegisteredon()->format("Y")][$vendorInfo->getRegisteredon()->format("n")];
+        }
+        
+        //var_dump($monthlyUser);exit;
         
         $data = new stdClass();
         
@@ -161,7 +185,10 @@ class Stat_model extends CI_Model
         $data->totalShare = $totalShare;
         $data->totalAndroid = $totalAndroid;
         $data->totalIos = $totalIos;
-		
+        
+        
+        $data->monthlyUserRegistration = $monthlyUser;
+        $data->monthlyVendorRegistration = $monthlyVendor;
         
         return array("status" => "success", "data" => $data);
     }

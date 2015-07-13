@@ -17,13 +17,25 @@ class Deals extends CI_Controller
     public function Add(){
         /*if(isset($_SESSION['vendorId']) && ($vendorId = $_SESSION['vendorId']) != "")
         {*/
+            if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") == 0)
+            {
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal Name.", "Code" => "400")));
+                exit;
+            }
+            
             if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
                 exit;
             }
+            
+            if(preg_match("/[0-9]{1,10}/", $vendorId = isset($_POST['vendorId']) ? intval(trim($_POST['vendorId'])) : "") == 0)
+            {
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Vendor ID.", "Code" => "400")));
+                exit;
+            }
 
-            if(preg_match("/[0-9a-zA-Z\.\_\/\\\]{1,160}/", $thumbnailImg = isset($_POST['thumbnailImg']) ? trim($_POST['thumbnailImg']) : "") == 0)
+            if(!isset($_FILE['thumbnailImg']))
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Thumbnail Image Link.", "Code" => "400")));
                 exit;
@@ -65,7 +77,7 @@ class Deals extends CI_Controller
             $status = 1;
 
             $this->load->model('Deals_model');
-            echo json_encode($this->Deals_model->CreateDeals($categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
+            echo json_encode($this->Deals_model->CreateDeals($name, $categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
         /*}
         else
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
