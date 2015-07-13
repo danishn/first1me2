@@ -34,6 +34,7 @@ class User_model extends CI_Model
         $user->setCity($city);
         $user->setPassword(crypt($password, strlen($email)));
         $user->setFbstatus($fbStatus);
+        $user->setRegisteredon(new \DateTime("now"));
         //var_dump($user);exit;
         try
         {

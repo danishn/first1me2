@@ -341,4 +341,35 @@ class User
     {
         return $this->fbstatus;
     }
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
+     */
+    private $registeredon = 'CURRENT_TIMESTAMP';
+
+
+    /**
+     * Set registeredon
+     *
+     * @param \DateTime $registeredon
+     *
+     * @return User
+     */
+    public function setRegisteredon($registeredon)
+    {
+        $this->registeredon = $registeredon;
+    
+        return $this;
+    }
+
+    /**
+     * Get registeredon
+     *
+     * @return \DateTime
+     */
+    public function getRegisteredon()
+    {
+        return $this->registeredon;
+    }
 }

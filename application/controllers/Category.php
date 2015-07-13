@@ -57,6 +57,11 @@ class Category extends CI_Controller
         echo json_encode($this->Category_model->ReadAllCategory($userId));
     }
     
+    public function Listing(){
+        $this->load->model('Category_model');
+        echo json_encode($this->Category_model->ListAllCategory());
+    }
+    
     public function Subscribe(){
         if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
         {

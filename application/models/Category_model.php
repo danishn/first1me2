@@ -80,6 +80,21 @@ class Category_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
+    public function ListAllCategory(){
+        $allCategory = $this->doctrine->em->getRepository('Entities\Category')->findAll();
+        if($allCategory != NULL){
+            for($i = 0; $i < count($allCategory); $i++)
+            {
+                $categoryList[$i] = new stdClass();
+                $categoryList[$i]->id = $allCategory[$i]->getId();
+                $categoryList[$i]->name = $allCategory[$i]->getDisplayname();
+            }
+            return array("status" => "success", "data" => $categoryList);
+        }
+        else
+            return array("status" => "error", "message" => array("Title" => "No Category Found.", "Code" => "200"));
+    }
+    
     public function UpdateSubscription($userId,  $toSubscribe, $toUnSubscribe){
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
