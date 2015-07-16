@@ -14,5 +14,7 @@ class Admin extends CI_Controller
         echo "Default Controller Action For Admin.";
     }
     
-    
+    public function Login(){
+        
+    }
 }

@@ -20,7 +20,7 @@
     <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="js/common.js"></script>
-    <script src="js/vendor.js"></script>
+    <script src="js/user.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -51,7 +51,7 @@
         <div id="progress_container">
             <img id="loader" src="dist/img/loader.gif">
         </div>
-        
+                
       <!-- Main Header -->
       <header class="main-header">
 
@@ -95,10 +95,10 @@
             <li class="header">Operations</li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href="dashboard.html"><i class='fa fa-home'></i> <span>Home</span></a></li>
-            <li><a href="user.html"><i class='fa fa-users'></i> <span>User</span></a></li>
+            <li class="active"><a href="user.html"><i class='fa fa-users'></i> <span>User</span></a></li>
             <li><a href="deals.html"><i class='fa fa-bullhorn'></i> <span>Deals</span></a></li>
             <li><a href="category.html"><i class='fa fa-tags'></i> <span>Category</span></a></li>
-            <li class="active"><a href="business.html"><i class='fa fa-dollar'></i> <span>Business</span></a></li>
+            <li><a href="business.html"><i class='fa fa-dollar'></i> <span>Business</span></a></li>
           </ul><!-- /.sidebar-menu -->
         </section>
       </aside>
@@ -108,12 +108,12 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Business/Vendor Details
+            User Details
             <small>Click to view more details</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Business</li>
+            <li class="active">User</li>
           </ol>
         </section>
         
@@ -122,26 +122,36 @@
         <div class="row">
             <div class="col-xs-12">
               <div class="box">
-                <div class="box-body table-responsive no-padding">
-                  <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Business Title</th>
-                                <th>Registered On</th>
-                                <th>Category</th>
-                                <th>Total Deals</th>
-                                <th>Total Views</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vendorTable">
-                            
-                        </tbody>
+                <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>OS</th>
+                        <th>Subscription(s)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userTable">
+                      
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>OS</th>
+                        <th>Subscription(s)</th>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-            </div>
-          </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
       </div><!-- /.content-wrapper -->
       
       <!-- Main Footer -->

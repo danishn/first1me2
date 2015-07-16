@@ -90,7 +90,7 @@ class Deals_model extends CI_Model
                     //var_dump($image);exit;
                     $image->scale(20);
                     $image->save('public/images/deal/thumb/'.$data['file_name']);
-                    $thumb_url = '/api/public/images/deal/thumb/' . $data['file_name'];
+                    $thumb_url = '/public/images/deal/thumb/' . $data['file_name'];
                     
                     $deals->setThumbnailimg($thumb_url);
                     $deals->setBigimg($big_url);
@@ -156,6 +156,26 @@ class Deals_model extends CI_Model
         
         if(isset($data) && count($data) > 0)
             return array("status" => "success", "data" =>$data);
+        else
+            return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
+    }
+    
+    public function ReadSingleDeals($dealId){
+        $deal = $this->em->getRepository('Entities\Deals')->find($dealId);
+        
+        if($deal != NULL){
+            $data = new stdClass();
+            $data->id = $deal->getId();
+            $data->name = $deal->getName();
+            $data->shortDesc = $deal->getShortdesc();
+            $data->longDesc = $deal->getLongdesc();
+            $data->pseudoViews = $deal->getPseudoviews();
+            $data->region = $deal->getRegion();
+            $data->expiresOn = $deal->getExpireson();
+            $data->status = $deal->getStatus();
+            
+            return array("status" => "success", "data" =>$data);
+        }
         else
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
