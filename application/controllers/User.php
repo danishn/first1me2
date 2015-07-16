@@ -39,13 +39,13 @@ class User extends CI_Controller
             exit;
         }
         
-        if(preg_match("/[a-zA-Z]{20}/", $country = isset($_POST['country']) ? trim($_POST['country']) : "") == 0)
+        if(preg_match("/[a-zA-Z]{1,20}/", $country = isset($_POST['country']) ? trim($_POST['country']) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Country Name.", "Code" => "400")));
             exit;
         }
         
-        if(preg_match("/[a-zA-Z]{20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
+        if(preg_match("/[a-zA-Z]{1,20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid City Name.", "Code" => "400")));
             exit;
@@ -57,11 +57,17 @@ class User extends CI_Controller
             exit;
         }
         
-        $GCMID = isset($_POST['GCMID']) ? $_POST['GCMID'] : "-";    //later this field will be mandatory
+        if(preg_match("/[a-zA-Z0-9\s\.\,\-\+\/\\\]{1,20}/", $os = isset($_POST['os']) ? trim($_POST['os']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Operating System.", "Code" => "400")));
+            exit;
+        }
+        
+        $token = isset($_POST['token']) ? $_POST['token'] : "-";    //later this field will be mandatory
         $fbStatus = 0;
         
-        $this->load->model('UserModel');
-        echo json_encode($this->UserModel->CreateUser($GCMID, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
     }
     
     public function FacebookShare(){
@@ -71,7 +77,24 @@ class User extends CI_Controller
             exit;
         }
         
-        $this->load->model('UserModel');
-        echo json_encode($this->UpdateFacebookStatus($userId));
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->UpdateFacebookStatus($userId));
+    }
+    
+    public function Login(){
+        if(preg_match("/^[a-z][a-z0-9\.\_]*@[a-z][a-z0-9\.]+[a-z]$/", $email = isset($_POST['email']) ? trim($_POST['email']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Email Address.", "Code" => "400")));
+            exit;
+        }
+        
+        if(preg_match("/[a-zA-Z0-9\'\"\s\.\,\-\+\/\\\]{4,250}/", $password = isset($_POST['password']) ? trim($_POST['password']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Password.", "Code" => "400")));
+            exit;
+        }
+        
+        $this->load->model('User_model');
+        echo json_encode($this->User_model->Login($email, $password));
     }
 }

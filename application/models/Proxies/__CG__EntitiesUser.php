@@ -64,10 +64,10 @@ class User extends \Entities\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Entities\\User' . "\0" . 'id', '' . "\0" . 'Entities\\User' . "\0" . 'gcmid', '' . "\0" . 'Entities\\User' . "\0" . 'firstname', '' . "\0" . 'Entities\\User' . "\0" . 'lastname', '' . "\0" . 'Entities\\User' . "\0" . 'email', '' . "\0" . 'Entities\\User' . "\0" . 'mobile', '' . "\0" . 'Entities\\User' . "\0" . 'country', '' . "\0" . 'Entities\\User' . "\0" . 'city', '' . "\0" . 'Entities\\User' . "\0" . 'password', '' . "\0" . 'Entities\\User' . "\0" . 'fbstatus');
+            return array('__isInitialized__', '' . "\0" . 'Entities\\User' . "\0" . 'id', '' . "\0" . 'Entities\\User' . "\0" . 'os', '' . "\0" . 'Entities\\User' . "\0" . 'token', '' . "\0" . 'Entities\\User' . "\0" . 'firstname', '' . "\0" . 'Entities\\User' . "\0" . 'lastname', '' . "\0" . 'Entities\\User' . "\0" . 'email', '' . "\0" . 'Entities\\User' . "\0" . 'mobile', '' . "\0" . 'Entities\\User' . "\0" . 'country', '' . "\0" . 'Entities\\User' . "\0" . 'city', '' . "\0" . 'Entities\\User' . "\0" . 'password', '' . "\0" . 'Entities\\User' . "\0" . 'fbstatus', '' . "\0" . 'Entities\\User' . "\0" . 'registeredon');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Entities\\User' . "\0" . 'id', '' . "\0" . 'Entities\\User' . "\0" . 'gcmid', '' . "\0" . 'Entities\\User' . "\0" . 'firstname', '' . "\0" . 'Entities\\User' . "\0" . 'lastname', '' . "\0" . 'Entities\\User' . "\0" . 'email', '' . "\0" . 'Entities\\User' . "\0" . 'mobile', '' . "\0" . 'Entities\\User' . "\0" . 'country', '' . "\0" . 'Entities\\User' . "\0" . 'city', '' . "\0" . 'Entities\\User' . "\0" . 'password', '' . "\0" . 'Entities\\User' . "\0" . 'fbstatus');
+        return array('__isInitialized__', '' . "\0" . 'Entities\\User' . "\0" . 'id', '' . "\0" . 'Entities\\User' . "\0" . 'os', '' . "\0" . 'Entities\\User' . "\0" . 'token', '' . "\0" . 'Entities\\User' . "\0" . 'firstname', '' . "\0" . 'Entities\\User' . "\0" . 'lastname', '' . "\0" . 'Entities\\User' . "\0" . 'email', '' . "\0" . 'Entities\\User' . "\0" . 'mobile', '' . "\0" . 'Entities\\User' . "\0" . 'country', '' . "\0" . 'Entities\\User' . "\0" . 'city', '' . "\0" . 'Entities\\User' . "\0" . 'password', '' . "\0" . 'Entities\\User' . "\0" . 'fbstatus', '' . "\0" . 'Entities\\User' . "\0" . 'registeredon');
     }
 
     /**
@@ -191,23 +191,45 @@ class User extends \Entities\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setGcmid($gcmid)
+    public function setOs($os)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGcmid', array($gcmid));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOs', array($os));
 
-        return parent::setGcmid($gcmid);
+        return parent::setOs($os);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getGcmid()
+    public function getOs()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGcmid', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOs', array());
 
-        return parent::getGcmid();
+        return parent::getOs();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setToken($token)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setToken', array($token));
+
+        return parent::setToken($token);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getToken()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getToken', array());
+
+        return parent::getToken();
     }
 
     /**
@@ -384,6 +406,28 @@ class User extends \Entities\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFbstatus', array());
 
         return parent::getFbstatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRegisteredon($registeredon)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRegisteredon', array($registeredon));
+
+        return parent::setRegisteredon($registeredon);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRegisteredon()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRegisteredon', array());
+
+        return parent::getRegisteredon();
     }
 
 }

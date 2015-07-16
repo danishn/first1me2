@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity
  */
 class User
@@ -24,9 +24,16 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="GCMID", type="string", length=160, nullable=false)
+     * @ORM\Column(name="os", type="string", length=20, nullable=false)
      */
-    private $gcmid;
+    private $os;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=160, nullable=false)
+     */
+    private $token;
 
     /**
      * @var string
@@ -59,7 +66,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=10, nullable=false)
+     * @ORM\Column(name="country", type="string", length=20, nullable=false)
      */
     private $country;
 
@@ -96,27 +103,51 @@ class User
     }
 
     /**
-     * Set gcmid
+     * Set os
      *
-     * @param string $gcmid
+     * @param string $os
      *
      * @return User
      */
-    public function setGcmid($gcmid)
+    public function setOs($os)
     {
-        $this->gcmid = $gcmid;
+        $this->os = $os;
 
         return $this;
     }
 
     /**
-     * Get gcmid
+     * Get os
      *
      * @return string
      */
-    public function getGcmid()
+    public function getOs()
     {
-        return $this->gcmid;
+        return $this->os;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     *
+     * @return User
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
@@ -309,5 +340,36 @@ class User
     public function getFbstatus()
     {
         return $this->fbstatus;
+    }
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
+     */
+    private $registeredon = 'CURRENT_TIMESTAMP';
+
+
+    /**
+     * Set registeredon
+     *
+     * @param \DateTime $registeredon
+     *
+     * @return User
+     */
+    public function setRegisteredon($registeredon)
+    {
+        $this->registeredon = $registeredon;
+    
+        return $this;
+    }
+
+    /**
+     * Get registeredon
+     *
+     * @return \DateTime
+     */
+    public function getRegisteredon()
+    {
+        return $this->registeredon;
     }
 }
