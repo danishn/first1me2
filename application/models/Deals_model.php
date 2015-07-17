@@ -160,6 +160,26 @@ class Deals_model extends CI_Model
             return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
     }
     
+    public function ReadSingleDeals($dealId){
+        $deal = $this->em->getRepository('Entities\Deals')->find($dealId);
+        
+        if($deal != NULL){
+            $data = new stdClass();
+            $data->id = $deal->getId();
+            $data->name = $deal->getName();
+            $data->shortDesc = $deal->getShortdesc();
+            $data->longDesc = $deal->getLongdesc();
+            $data->pseudoViews = $deal->getPseudoviews();
+            $data->region = $deal->getRegion();
+            $data->expiresOn = $deal->getExpireson();
+            $data->status = $deal->getStatus();
+            
+            return array("status" => "success", "data" =>$data);
+        }
+        else
+            return array("status" => "error", "message" => array("Title" => "No Data Found.", "Code" => "200"));
+    }
+    
     public function UpdateSeen($userId, $dealId){
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));

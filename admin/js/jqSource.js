@@ -2,6 +2,7 @@ $(document).ready(function(){
     var BASE_URL = "../index.php";                                              //cloud
     //var BASE_URL = "../first1me2/index.php";                                  //home
     
+<<<<<<< HEAD
     function getStatusButton(status){
         if(status == 0)
             return "<span class='label label-danger'>Suspend</span>";
@@ -13,6 +14,8 @@ $(document).ready(function(){
             return "<span class='label label-primary'>Hidden</span>";
     }
     
+=======
+>>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
     function donutChart(totalAndroid, totalIos){
 	var chart = new CanvasJS.Chart("donut-chart",
 	{
@@ -141,6 +144,7 @@ $(document).ready(function(){
         });
     }
     dashBoardStat();
+<<<<<<< HEAD
     
     function userStat(){
         $.ajax({
@@ -246,4 +250,6 @@ $(document).ready(function(){
             }
         });
     });
+=======
+>>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
 });

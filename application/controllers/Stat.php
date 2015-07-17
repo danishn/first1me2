@@ -13,8 +13,11 @@ class Stat extends CI_Controller
         parent::__construct(); 
 
         $this->load->model("Stat_model", "Stat_model");
+<<<<<<< HEAD
         //@header("content-type:application/json");
         //$this->load->model("User_model");
+=======
+>>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
     }
     
     public function index()

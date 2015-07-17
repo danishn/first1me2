@@ -15,7 +15,7 @@ class Deals extends CI_Controller
     }
     
     public function Add(){
-        /*if(isset($_SESSION['vendorId']) && ($vendorId = $_SESSION['vendorId']) != "")
+        /*if(isset($_SESSION['adminId']) && ($vendorId = $_SESSION['adminId']) != "")
         {*/
             if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") == 0)
             {
@@ -30,20 +30,27 @@ class Deals extends CI_Controller
             }
             
             if(preg_match("/[0-9]{1,10}/", $vendorId = isset($_POST['vendorId']) ? intval(trim($_POST['vendorId'])) : "") == 0)
+<<<<<<< HEAD
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Vendor ID.", "Code" => "400")));
                 exit;
             }
 
             if(!isset($_FILES['dealImg']))
+=======
+>>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
             {
-                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Thumbnail Image Link.", "Code" => "400")));
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Vendor ID.", "Code" => "400")));
                 exit;
             }
 
+<<<<<<< HEAD
             /*if(preg_match("/[0-9a-zA-Z\.\_\/\\\]{1,160}/", $bigImg = isset($_POST['bigImg']) ? trim($_POST['bigImg']) : "") == 0)
+=======
+            if(!isset($_FILES['dealImg']))
+>>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
             {
-                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Large Image Link.", "Code" => "400")));
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Thumbnail Image Link.", "Code" => "400")));
                 exit;
             }*/
 
@@ -91,6 +98,21 @@ class Deals extends CI_Controller
         }
         $this->load->model('Deals_model');
         echo json_encode($this->Deals_model->ReadUserDeals($userId));
+    }
+    
+    public function GetThis(){
+        /*if(isset($_SESSION['adminId']) && ($vendorId = $_SESSION['adminId']) != "")
+        {*/
+            if(preg_match("/[0-9]{1,10}/", $dealId = isset($_POST['dealId']) ? intval(trim($_POST['dealId'])) : "") == 0)
+            {
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal ID.", "Code" => "400")));
+                exit;
+            }
+            $this->load->model('Deals_model');
+            echo json_encode($this->Deals_model->ReadSingleDeals($dealId));
+        /*}
+        else
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
     }
     
     public function MarkAsSeen(){
