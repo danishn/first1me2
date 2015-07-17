@@ -70,11 +70,11 @@ class User_model extends CI_Model
     }
     
     public function Login($email, $password){
-        $thisUser = $this->doctrine->em->getRepository('Entities\User')->findBy(array('email' => $email));
+        $thisUser = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
         
-        if(is_array($thisUser) && !empty($thisUser))
+        if($thisUser != NULL)
         {
-            if(crypt($password, strlen($email)) == $thisUser[0]->getPassword())
+            if(crypt($password, strlen($email)) == $thisUser->getPassword())
             {
                 return array("status" => "success", "data" => array("Logged in Successfully.", "userId" => $thisUser->getId()));
             }

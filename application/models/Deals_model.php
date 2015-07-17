@@ -4,7 +4,7 @@
  * FirstMe Server API
  * Author : Biswajit Bardhan  * 
  */
-
+use \Library\ImageResize;       // Use Namespace for Image resize
 class Deals_model extends CI_Model
 {
     public $em;                         //doctrine entity manager
@@ -13,6 +13,7 @@ class Deals_model extends CI_Model
     {
         parent::__construct();
         $this->em = $this->doctrine->em;
+        $this->load->file('application/classes/ImageResize.php');     // Load file for Image resize
     }
     
     //-----Helper functions
@@ -34,54 +35,68 @@ class Deals_model extends CI_Model
     }
     //---------------------
     
-    public function CreateDeals($name, $categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
+    public function CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
+        
+        $category = $this->em->getRepository('Entities\Category')->find($categoryId);
+        $vendor = $this->em->getRepository('Entities\Vendor')->find($vendorId);
+        if($category == NULL)
+            return array("status" => "error", "message" => array("Title" => "Category not found.", "Code" => "404"));
+        if($vendor == NULL)
+            return array("status" => "error", "message" => array("Title" => "Vendor not found.", "Code" => "404"));
+        
+        //var_dump(new \DateTime((string)$expiresOn));exit;
         $deals = new Entities\Deals;
         
         $deals->setName($name);
-        $deals->setCategoryid($categoryId);
-        $deals->setVendorid($vendorId);
+        $deals->setCategoryid($category);
+        $deals->setVendorid($vendor);
         $deals->setCreatedon(new \DateTime("now"));
-        //$deals->setThumbnailimg($thumbnailimg);
-        $deals->setBigimg($bigimg);
+        $deals->setThumbnailimg("/public/images/deal/thumb/default.png");
+        $deals->setBigimg("/public/images/deal/big/default.png");
         $deals->setRegion($region);
-        $deals->setShortdesc($shortdesc);
-        $deals->setLongdesc($longdesc);
+        $deals->setShortdesc($shortDesc);
+        $deals->setLongdesc($longDesc);
         $deals->setLikes($likes);
         $deals->setViews($views);
-        $deals->setPseudoviews($pseudoviews);
-        $deals->setExpireson($expireson);
+        $deals->setPseudoviews($pseudoViews);
+        $deals->setExpireson(new \DateTime((string)$expiresOn));
         $deals->setStatus($status);
-        
-        try
-        {
+        //var_dump($deals);exit;
+        try{
             $this->em->persist($deals);
             $this->em->flush();
-            
-            if(isset($_FILES["thumbnailImg"]))
-            {
-                $target_path = "images/deals/" . $_FILES["thumbnailImg"]["name"];
-                $allowedExts = array("jpg", "jpeg", "png", "bmp");
-                $fileExt = explode(".", $_FILES["thumbnailImg"]["name"]);
-                if(in_array($fileExt[count($fileExt)-1], $allowedExts))
-                {
-                    if ($_FILES["thumbnailImg"]["error"] > 0)
-                    {
-                        echo "Error: " . $_FILES["thumbnailImg"]["error"];
-                    }
-                    else
-                    {
-                        if(file_exists("images/deals/" . $_FILES["thumbnailImg"]["name"]))
-                            unlink("images/deals/".$_FILES["thumbnailImg"]["name"]);
-
-                        move_uploaded_file($_FILES["thumbnailImg"]["tmp_name"], "images/deals/".$deals->getId());
-                        //move_uploaded_file($_FILES["thumbnailImg"]["tmp_name"], "images/deals/".$_FILES["thumbnailImg"]["name"]);
-                    }
+             if(isset($_FILES['dealImg'])){   
+                $pic = explode('.', $_FILES['dealImg']['name']);
+                
+                // upload event photo to server & set image URLs
+                $config['upload_path'] = 'public/images/deal/big';
+                $config['allowed_types'] = 'gif|jpeg|jpg|png';
+                $config['max_size']	= '10000';
+                $config['overwrite'] = true;
+                $config['file_name'] = $deals->getId(). "." .$pic[count($pic)-1];
+                
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                
+                if(!$this->upload->do_upload('dealImg')){
+                    //return 'error '.$this->upload->display_errors();
+                    return array("status" => "error", "message" => array("Title" => "Deal Added, but failed to upload Image.", "Code" => "404"));
                 }
-                else
-                    echo "Error : Unsupported file.";
+                else{
+                    $data = $this->upload->data();
+                    $thumb_url  = $big_url = '/public/images/deal/big/' . $data['file_name'];
+                    
+                    $image = new ImageResize('public/images/deal/big/'.$data['file_name']);
+                    //var_dump($image);exit;
+                    $image->scale(20);
+                    $image->save('public/images/deal/thumb/'.$data['file_name']);
+                    $thumb_url = '/public/images/deal/thumb/' . $data['file_name'];
+                    
+                    $deals->setThumbnailimg($thumb_url);
+                    $deals->setBigimg($big_url);
+                    $this->em->flush();
+                }
             }
-            else
-                echo "Error : File not found.";
             
             return array("status" => "success", "data" => array("Deal Added Successfully."));
         }
@@ -122,7 +137,7 @@ class Deals_model extends CI_Model
                     $data[$j]->categoryId = $deal->getCategoryid()->getId();
                     $data[$j]->vendorId = $deal->getVendorid()->getId();
                     $data[$j]->createdOn = $deal->getCreatedon();
-                    $data[$j]->thumbnailImg = $deal->getThumbnailimg();
+                    $data[$j]->dealImg = $deal->getThumbnailimg();
                     $data[$j]->bigImg = $deal->getBigimg();
                     $data[$j]->region = $deal->getRegion();
                     $data[$j]->shortDesc = $deal->getShortdesc();

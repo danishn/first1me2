@@ -19,7 +19,7 @@ class Deals extends CI_Controller
         {*/
             if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") == 0)
             {
-                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal Name.", "Code" => "400")));
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal Name. {$_POST['name']}.", "Code" => "400")));
                 exit;
             }
             
@@ -35,17 +35,17 @@ class Deals extends CI_Controller
                 exit;
             }
 
-            if(!isset($_FILE['thumbnailImg']))
+            if(!isset($_FILES['dealImg']))
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Thumbnail Image Link.", "Code" => "400")));
                 exit;
             }
 
-            if(preg_match("/[0-9a-zA-Z\.\_\/\\\]{1,160}/", $bigImg = isset($_POST['bigImg']) ? trim($_POST['bigImg']) : "") == 0)
+            /*if(preg_match("/[0-9a-zA-Z\.\_\/\\\]{1,160}/", $bigImg = isset($_POST['bigImg']) ? trim($_POST['bigImg']) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Large Image Link.", "Code" => "400")));
                 exit;
-            }
+            }*/
 
             if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $region = isset($_POST['region']) ? trim($_POST['region']) : "") == 0)
             {
@@ -77,7 +77,7 @@ class Deals extends CI_Controller
             $status = 1;
 
             $this->load->model('Deals_model');
-            echo json_encode($this->Deals_model->CreateDeals($name, $categoryId, $vendorId, $thumbnailImg, $bigImg, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
+            echo json_encode($this->Deals_model->CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
         /*}
         else
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
