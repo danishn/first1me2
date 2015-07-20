@@ -109,7 +109,47 @@ class Deals_model extends CI_Model
     public function ReadUserDeals($userId){
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
+        //---------
+        /*
+         *  SELECT deals.id, deals.name, deals.shortDesc, deals.expiresOn, deals.status
+            from deals INNER JOIN category
+            ON deals.categoryId = category.id
+            WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = 9)
+            And deals.expiresOn >= CURDATE()
+         * 
+         * 
+        $qb2=$this->createQueryBuilder('s')
+        ->addSelect('u')
+        ->innerJoin('s.user','u')
+        ->where("u.id IN(:followeeIds)")
+        ->andWhere('s.admin_status = false')
+        ->setParameter('followeeIds', array_values($arrayFolloweeIds))
+        ->orderBy('s.id','DESC')
+        ->setMaxResults(15)
         
+        $queryBuilder
+                ->select('d.id', 'd.name', 'd.', 'd.', 'd.', 'd.', 'p.number')
+                ->from('users', 'u')
+                ->innerJoin('u', 'phonenumbers', 'p', 'u.id = p.user_id');*/
+        try{
+            /*$dealIds = $this->em->createQueryBuilder()
+                        ->select('d.id, d.name')
+                        ->from('deals', 'd')
+                        ->getQuery()
+                        ->getArrayResult();*/
+
+           $query = $this->em->createQuery("SELECT deals.id, deals.name, deals.shortDesc, deals.expiresOn, deals.status
+            from deals INNER JOIN category
+            ON deals.categoryId = category.id
+            WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = ?1)
+            And deals.expiresOn >= CURDATE()")->setParameter(1, 9)->getResult();
+            var_dump($dealIds);exit;
+        }catch(Exception $exc){
+            echo "Exception Occured\n" . $exc->getTraceAsString();
+            exit;
+        }
+        
+        //---------
         $mySubscriptions = $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(
                 array('userid' => $userId)
                 );

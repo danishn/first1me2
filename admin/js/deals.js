@@ -2,8 +2,6 @@ $(document).ready(function(){
     var BASE_URL = "../index.php";                                              //cloud
     //var BASE_URL = "../first1me2/index.php";                                  //home
     
-<<<<<<< HEAD
-=======
     $(function(){
         $("#example1").dataTable();
         $('#dealTableTable').dataTable({
@@ -16,7 +14,6 @@ $(document).ready(function(){
         });
       });
     
->>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
     function getStatusButton(status){
         if(status == 0)
             return "<span class='label label-danger'>Suspend</span>";
@@ -28,8 +25,6 @@ $(document).ready(function(){
             return "<span class='label label-primary'>Hidden</span>";
     }
     
-<<<<<<< HEAD
-=======
     $("#dealTable").on("click", "tr", function(){
         //console.log("clicked" + $(this).attr("id"));
         $.ajax({
@@ -63,7 +58,6 @@ $(document).ready(function(){
         });
     });
     
->>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
     function dealStat(){
         $.ajax({
             url : BASE_URL + "/Stat/Deals",
@@ -73,21 +67,13 @@ $(document).ready(function(){
             success : function(data){
                 //console.log(data);
                 if(BASE_URL.indexOf("index.php") > -1)
-<<<<<<< HEAD
-                    var imagePath = BASE_URL.substring(0, BASE_URL.indexOf("index.php"));
-=======
                     var imagePath = BASE_URL.substring(0, BASE_URL.indexOf("/index.php"));
->>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
                 else
                     var imagePath = BASE_URL;
                 data = JSON.parse(data);
                 $("#dealTable").empty();
                 data.data.deals.map(function(deal){
-<<<<<<< HEAD
-                    $("#dealTable").append("<tr id='" + deal.id + "'><td>" + "<img src='" + imagePath + deal.thumbnailImg + "' width = '50px' height = '50px'>" + "</td><td>" + deal.name + "</td><td>" + deal.category + "</td><td>" + deal.region + "</td><td>" + deal.views + "</td><td>" + deal.expiresOn.date.substring(0,deal.expiresOn.date.indexOf('.')) + "</td><td>" + getStatusButton(deal.status) + "</td></tr>");
-=======
                     $("#dealTable").append("<tr id='" + deal.id + "'><td>" + "<img src='" + imagePath + deal.thumbnailImg + "' width = '30px' height = '30px'>" + "</td><td>" + deal.name + "</td><td>" + deal.category + "</td><td>" + deal.region + "</td><td>" + deal.views + "</td><td>" + deal.expiresOn.date.substring(0,deal.expiresOn.date.indexOf(' ')) + "</td><td>" + getStatusButton(deal.status) + "</td></tr>");
->>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
                 });
             },
            
@@ -143,8 +129,6 @@ $(document).ready(function(){
         });
     }
     vendorListing();
-<<<<<<< HEAD
-=======
     
     
     $("form").submit(function(event){	//GENERIC form submit function
@@ -182,5 +166,4 @@ $(document).ready(function(){
             }
         });
     });
->>>>>>> eb1de31ba976afdb1fdeb89d6597609e1c718c7a
 });
