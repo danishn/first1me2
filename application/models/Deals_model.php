@@ -110,14 +110,21 @@ class Deals_model extends CI_Model
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
         
-        $mySubscriptions = $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(
+        //----Implement Query Builder for with join
+        $con = $this->em->getConnection();
+        $query = $con->prepare("SELECT deals.id, deals.name, deals.categoryId, deals.vendorId, deals.createdOn, deals.thumbnailImg, deals.bigImg, deals.region, deals.shortDesc, deals.longDesc, deals.likes, deals.views, deals.pseudoViews, deals.expiresOn, deals.status from deals INNER JOIN category ON deals.categoryId = category.id WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = $userId) And deals.status = 1 And deals.expiresOn >= CURDATE()");
+        $query->execute();
+        $data = $query->fetchAll();
+        //var_dump($data);exit;
+        //-----------------------------------------
+        
+        /*$mySubscriptions = $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(
                 array('userid' => $userId)
                 );
         if($mySubscriptions == NULL)
             return array("status" => "error", "message" => array("Title" => "Please subscribe atleast one Category first.", "Code" => "503"));
         
         //var_dump(count($this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => 1))));exit;
-        
         for($i = 0; $i < count($mySubscriptions); $i++)
             $myDeals[$i] = $this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => $mySubscriptions[$i]->getCategoryid()->getId()));
         
@@ -152,7 +159,7 @@ class Deals_model extends CI_Model
                     $j++;
                 }
             }
-        }
+        }*/
         
         if(isset($data) && count($data) > 0)
             return array("status" => "success", "data" =>$data);
