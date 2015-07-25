@@ -1,2 +1,4 @@
+nbproject/*
+public/images/deal/big/*.*
+public/images/deal/thumb/*.*
 *.xml
-nbproject
