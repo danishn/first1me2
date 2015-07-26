@@ -112,7 +112,7 @@ class Doctrine {
     $generator->setUpdateEntityIfExists(true);
     $generator->setGenerateStubMethods(true);
     $generator->setGenerateAnnotations(true);
-    //$generator->generate($metadata, APPPATH."models/");
+    $generator->generate($metadata, APPPATH."models/");
   }
 }
 
