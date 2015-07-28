@@ -35,7 +35,7 @@ class GCM {
             'registration_ids' => $registatoin_ids,
             'notification' => $message,
             'data' => $data,
-            'collapse_key' => $data['type']
+            'collapse_key' => 'deals'
         );
         
         //echo json_encode($fields);exit;

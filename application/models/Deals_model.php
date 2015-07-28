@@ -181,11 +181,18 @@ class Deals_model extends CI_Model
                         "body" => 'Recieved New Notification..'
                      );
 
-                    $data = array(
+                    /*$data = array(
                         "type" => 'event',
                         "msg" => 'New Notification',
                         "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
+                     );*/
+                    
+                    $data = array(
+                        "title" => $deals->getName(),
+                        "body" => $deals->getShortdesc(),
+                        "deal" => $deals->getId()
                      );
+                    
                     // GCM Call
                     if(is_array($gcmToken) && !empty($gcmToken)){
                         $this->load->file('application/classes/GCM.php');
