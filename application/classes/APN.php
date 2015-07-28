@@ -26,7 +26,8 @@ class APN {
         );*/
         
         $headers = array(
-            'Authorization: key=AIzaSyCNvW6_F6gPX4uOF5cj__qqcAvIQ5JOpAw',
+            //'Authorization: key=AIzaSyCNvW6_F6gPX4uOF5cj__qqcAvIQ5JOpAw',
+            'Authorization: key=AIzaSyC9_4QA8rEHKMcsMG700uPTOxvqEz3oxCE',
             'Content-Type: application/json'
         );
         
