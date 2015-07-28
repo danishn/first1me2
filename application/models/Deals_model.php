@@ -33,6 +33,74 @@ class Deals_model extends CI_Model
         
         return $dealIds;
     }
+    
+    public function gcm(){   
+        /*
+        // Select brodcast receivers depending upon type of broadcast notification
+            $data = array(
+                'type' => 'event',
+                'event_id' => 72
+            );
+            $this->load->model('Notification_model', 'notification');
+            $reg_ids = $this->notification->get_tokens($data);
+            var_dump($reg_ids);exit;
+        */
+        // -----------------------------------------------------------------------------------------
+        
+        
+        //  Fetch from db
+        $this->em = $this->doctrine->em;        // Doctrine initialization
+        $gcm_users = $this->em->getRepository('Entities\NotificationIds')->findAll();
+        
+        //var_dump($gcm_users);exit;
+        
+        $registration_ids = [];
+        
+        if($gcm_users)
+        {
+             foreach($gcm_users as $gcm_user){
+                 $registration_ids[] = $gcm_user->getToken();    
+             }
+        }
+        
+        //$registration_ids[] = $this->input->post('registration_id');
+        
+        if($registration_ids[0] == null){
+            echo 'error No Registration Ids found';
+            exit;
+        }
+        
+        $message = array(
+            "title" => "New Deals Waiting",
+            "body" => 'Recieved New Notification..'
+         );
+        
+        $data = array(
+            "type" => 'event',
+            "msg" => 'New Notification',
+            "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
+         );
+        
+        
+        // GCM Call
+        $this->load->file('application/classes/GCM.php');
+        $gcm = new GCM();
+        $gcm_res = $gcm->send_notification($registration_ids, $message, $data);
+        
+        // APN Call
+        $this->load->file('application/classes/APN.php');
+        $apn = new APN();
+        $apn_res = $apn->send_notification($registration_ids, $message, $data);
+        
+        $response =new Response();
+        $response->setSuccess('true');
+        $response->setdata(array('gcm_response'=>$gcm_res, 'apn_response'=>$apn_res));
+        $response->setError(null);
+                
+        $response->respond();
+        exit;
+        
+    }
     //---------------------
     
     public function CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
@@ -95,13 +163,50 @@ class Deals_model extends CI_Model
                     $deals->setThumbnailimg($thumb_url);
                     $deals->setBigimg($big_url);
                     $this->em->flush();
+                    
+                    //Send Push Notification
+                    $subscribed = $this->em->getRepository('Entities\Subscriptions')->findBy(array('categoryid' => $deals->getCategoryid()->getId()));
+                    //var_dump($subscribed);exit;
+                    if(is_array($subscribed) && !empty($subscribed)){
+                        foreach($subscribed as $subscription){
+                            //$gcmToken[] = $subscription->getUserid();
+                            stristr($subscription->getUserid()->getOs(), 'android') ? $gcmToken[] = $subscription->getUserid() : $apnToken[] = $subscription->getUserid();
+                        }
+                    }
+                    /*var_dump($gcmToken);
+                    var_dump($apnToken);exit;*/
+                    $message = array(
+                        "title" => "New Deals Waiting",
+                        "body" => 'Recieved New Notification..'
+                     );
+
+                    $data = array(
+                        "type" => 'event',
+                        "msg" => 'New Notification',
+                        "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
+                     );
+                    // GCM Call
+                    if(is_array($gcmToken) && !empty($gcmToken)){
+                        $this->load->file('application/classes/GCM.php');
+                        $gcm = new GCM();
+                        $gcm_res = $gcm->send_notification($gcmToken, $message, $data);
+                    }
+
+                    // APN Call
+                    if(is_array($apnToken) && !empty($apnToken)){
+                        $this->load->file('application/classes/APN.php');
+                        $apn = new APN();
+                        $apn_res = $apn->send_notification($apnToken, $message, $data);
+                    }
                 }
             }
             
-            return array("status" => "success", "data" => array("Deal Added Successfully."));
+            //return array("status" => "success", "data" => array("Deal Added Successfully."));//'\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res_res));
+            return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res));
         }
         catch(Exception $exc)
         {
+            //return array("status" => "error", "message" => array("Title" => "Exception Occured", "Code" => "503"));
             return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
         }
     }
@@ -109,8 +214,6 @@ class Deals_model extends CI_Model
     public function ReadUserDeals($userId){
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
-        
-        //----Implement Query Builder for with join
         $con = $this->em->getConnection();
         $query = $con->prepare("SELECT deals.id, deals.name, deals.categoryId, deals.vendorId, deals.createdOn, deals.thumbnailImg, deals.bigImg, deals.region, deals.shortDesc, deals.longDesc, deals.likes, deals.views, deals.pseudoViews, deals.expiresOn, deals.status from deals INNER JOIN category ON deals.categoryId = category.id WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = $userId) And deals.status = 1 And deals.expiresOn >= CURDATE()");
         $query->execute();

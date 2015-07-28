@@ -17,12 +17,12 @@ class Deals extends CI_Controller
     public function Add(){
         /*if(isset($_SESSION['adminId']) && ($vendorId = $_SESSION['adminId']) != "")
         {*/
-            if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") == 0)
+            if(preg_match("/^\w[a-zA-Z0-9\.\,\s\/\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal Name. {$_POST['name']}.", "Code" => "400")));
                 exit;
             }
-            
+                
             if(preg_match("/[0-9]{1,5}/", $categoryId = isset($_POST['categoryId']) ? intval(trim($_POST['categoryId'])) : "") == 0)
             {
                 echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Category ID.", "Code" => "400")));
@@ -37,7 +37,7 @@ class Deals extends CI_Controller
 
             if(!isset($_FILES['dealImg']))
             {
-                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Thumbnail Image Link.", "Code" => "400")));
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal Image Link.", "Code" => "400")));
                 exit;
             }
 
