@@ -163,20 +163,21 @@ class Deals_model extends CI_Model
                     $deals->setThumbnailimg($thumb_url);
                     $deals->setBigimg($big_url);
                     $this->em->flush();
-                    
+                    $gcmToken = array();
+                    $apnToken = array();
+                    $gcm_res = "GCM Failure";
+                    $apn_res = "APN Failure";
                     //Send Push Notification
                     $subscribed = $this->em->getRepository('Entities\Subscriptions')->findBy(array('categoryid' => $deals->getCategoryid()->getId()));
                     //var_dump($subscribed);exit;
                     if(is_array($subscribed) && !empty($subscribed)){
                         foreach($subscribed as $subscription){
-                            //$gcmToken[] = $subscription->getUserid();
-                            stristr($subscription->getUserid()->getOs(), 'android') ? $gcmToken[] = $subscription->getUserid() : $apnToken[] = $subscription->getUserid();
+                            stristr($subscription->getUserid()->getOs(), 'android') ? $gcmToken[] = $subscription->getUserid()->getToken() : $apnToken[] = $subscription->getUserid()->getToken();
                         }
                     }
-                    /*var_dump($gcmToken);
-                    var_dump($apnToken);exit;*/
+                    
                     $message = array(
-                        "title" => "New Deals Waiting",
+                        "title" => "New Deals Added",
                         "body" => 'Recieved New Notification..'
                      );
 
@@ -200,7 +201,7 @@ class Deals_model extends CI_Model
                     }
                 }
             }
-            
+            //print_r($gcmToken);
             //return array("status" => "success", "data" => array("Deal Added Successfully."));//'\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res_res));
             return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res));
         }
@@ -208,6 +209,19 @@ class Deals_model extends CI_Model
         {
             //return array("status" => "error", "message" => array("Title" => "Exception Occured", "Code" => "503"));
             return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
+        }
+    }
+    
+    public function UpdateDeal($updateFields, $dealId){
+        $deal = new Entities\Deals;
+        try
+        {
+            $this->db->update('deals', $updateFields, array("id" => $dealId));
+            return array("status" => "success", "data" => array("Deal Updated Successfully."));
+        }
+        catch(Exception $exc)
+        {
+            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString(), "Code" => "503"));
         }
     }
     
