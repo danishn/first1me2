@@ -77,6 +77,39 @@ class Deals extends CI_Controller
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
     }
     
+    public function Edit(){
+        if(preg_match("/[0-9]{1,10}/", $dealId = isset($_POST['dealId']) ? intval(trim($_POST['dealId'])) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Deal ID.", "Code" => "400")));
+            exit;
+        }
+        else    //no further proceedings, if category id is missing
+        {
+            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\s\\\]{1,30}/", $name = isset($_POST['name']) ? trim($_POST['name']) : "") != 0)
+            {
+                $updateFields["name"] = $name;
+            }
+
+            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,255}/", $shortDesc = isset($_POST['shortDesc']) ? trim($_POST['shortDesc']) : "") != 0)
+            {
+                $updateFields["shortDesc"] = $shortDesc;
+            }
+
+            if(preg_match("/^\w[a-zA-Z0-9\-\_\.\,\%\@\$\s\\\]{1,}/", $longDesc = isset($_POST['longDesc']) ? trim($_POST['longDesc']) : "") != 0)
+            {
+                $updateFields["longDesc"] = $longDesc;
+            }
+
+            if(is_array($updateFields) && count($updateFields) > 0)
+            {
+                $this->load->model('Deals_model');
+                echo json_encode($this->Deals_model->UpdateDeal($updateFields, $dealId));
+            }
+            else
+                echo json_encode(array("status" => "error", "message" => array("Title" => "No fields found to update.", "Code" => "400")));
+        }
+    }
+    
     public function GetMyDeals(){
         if(preg_match("/[0-9]{1,10}/", $userId = isset($_POST['userId']) ? intval(trim($_POST['userId'])) : "") == 0)
         {
