@@ -33,7 +33,7 @@ class GCM {
         
         $fields = array(
             'registration_ids' => $registatoin_ids,
-            'notification' => $message,
+            //'notification' => $message,
             'data' => $data,
             'collapse_key' => 'deals'
         );
