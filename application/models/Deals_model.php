@@ -219,6 +219,31 @@ class Deals_model extends CI_Model
         }
     }
     
+    public function DemoGCM($email){
+        $device = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('email' => $email));
+        
+        $data = array(
+                        "title" => "Test GCM Notification",
+                        "body" => "This is a test notification, sent at " . date("d-m-Y H:i:s"),
+                        "deal" => 100
+                     );
+        if($device != NULL){
+            $token[] = $device->getToken();
+            //print_r($token);
+            //print_r($data);exit;
+            if(stristr($device->getOs(), 'android')){
+                $this->load->file('application/classes/GCM.php');
+                $gcm = new GCM();
+                return $gcm->send_notification($token, $message = "", $data);
+            }
+            else{
+                $this->load->file('application/classes/APN.php');
+                $apn = new APN();
+                return $apn->send_notification($token, $message = "", $data);
+            }
+        }
+    }
+    
     public function UpdateDeal($updateFields, $dealId){
         $deal = new Entities\Deals;
         try

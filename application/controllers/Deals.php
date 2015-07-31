@@ -77,6 +77,17 @@ class Deals extends CI_Controller
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/
     }
     
+    public function Push(){
+        if(preg_match("/^[a-z][a-z0-9\.\_]*@[a-z][a-z0-9\.]+[a-z]$/", $email = isset($_POST['email']) ? trim($_POST['email']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Email Address.", "Code" => "400")));
+            exit;
+        }
+        
+        $this->load->model('Deals_model');
+        echo json_encode($this->Deals_model->DemoGCM($email));
+    }
+    
     public function Edit(){
         if(preg_match("/[0-9]{1,10}/", $dealId = isset($_POST['dealId']) ? intval(trim($_POST['dealId'])) : "") == 0)
         {
