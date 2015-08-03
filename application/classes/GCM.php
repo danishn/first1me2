@@ -24,8 +24,7 @@ class GCM {
         // 'Authorization: key=AIzaSyAdcp_ExRygjsNZCJatSuRa5lq-zVKbaLQ',
         
         $headers = array(
-            //'Authorization: key=AIzaSyDA76icBLYgTTwMgmkMQgadlhbyGproojg',
-            'Authorization: key=AIzaSyC9_4QA8rEHKMcsMG700uPTOxvqEz3oxCE',
+            'Authorization: key=AIzaSyDA76icBLYgTTwMgmkMQgadlhbyGproojg',
             'Content-Type: application/json'
         );
         
@@ -34,11 +33,11 @@ class GCM {
         $fields = array(
             'registration_ids' => $registatoin_ids,
             //'notification' => $message,
-            'data' => $data,
-            'collapse_key' => 'deals'
+            'data' => $data
+            //'collapse_key' => $data['type']
         );
         
-        //echo json_encode($fields);exit;
+        echo json_encode($fields);exit;
         
         // Open connection
         $ch = curl_init();

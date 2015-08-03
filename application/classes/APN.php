@@ -26,8 +26,7 @@ class APN {
         );*/
         
         $headers = array(
-            //'Authorization: key=AIzaSyCNvW6_F6gPX4uOF5cj__qqcAvIQ5JOpAw',
-            'Authorization: key=AIzaSyC9_4QA8rEHKMcsMG700uPTOxvqEz3oxCE',
+            'Authorization: key=AIzaSyCNvW6_F6gPX4uOF5cj__qqcAvIQ5JOpAw',
             'Content-Type: application/json'
         );
         
@@ -36,7 +35,7 @@ class APN {
             'notification' => $message,
             'data' => $data,
             'content_available' => true,
-            'collapse_key' => 'deals'
+            'collapse_key' => $data['type']
         );
         
        //echo json_encode($fields);exit;
@@ -64,5 +63,5 @@ class APN {
         // Close connection
         curl_close($ch);        
         return $result;
-    } 
+    }
 }
