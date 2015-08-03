@@ -91,6 +91,13 @@ class User
      */
     private $fbstatus;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
+     */
+    private $registeredon = 'CURRENT_TIMESTAMP';
+
 
     /**
      * Get id
@@ -341,13 +348,6 @@ class User
     {
         return $this->fbstatus;
     }
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
-     */
-    private $registeredon = 'CURRENT_TIMESTAMP';
-
 
     /**
      * Set registeredon
@@ -359,7 +359,7 @@ class User
     public function setRegisteredon($registeredon)
     {
         $this->registeredon = $registeredon;
-    
+
         return $this;
     }
 

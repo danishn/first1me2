@@ -31,7 +31,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="token", type="string", length=160, nullable=false)
+     * @ORM\Column(name="token", type="text", length=65535, nullable=false)
      */
     private $token;
 
@@ -73,6 +73,13 @@ class User
     /**
      * @var string
      *
+     * @ORM\Column(name="state", type="string", length=20, nullable=false)
+     */
+    private $state;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="city", type="string", length=20, nullable=false)
      */
     private $city;
@@ -90,6 +97,13 @@ class User
      * @ORM\Column(name="fbStatus", type="string", length=1, nullable=false)
      */
     private $fbstatus;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
+     */
+    private $registeredon = 'CURRENT_TIMESTAMP';
 
 
     /**
@@ -271,6 +285,30 @@ class User
     }
 
     /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return User
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
      * Set city
      *
      * @param string $city
@@ -341,13 +379,6 @@ class User
     {
         return $this->fbstatus;
     }
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="registeredOn", type="datetime", nullable=false)
-     */
-    private $registeredon = 'CURRENT_TIMESTAMP';
-
 
     /**
      * Set registeredon
@@ -359,7 +390,7 @@ class User
     public function setRegisteredon($registeredon)
     {
         $this->registeredon = $registeredon;
-    
+
         return $this;
     }
 
@@ -373,3 +404,4 @@ class User
         return $this->registeredon;
     }
 }
+

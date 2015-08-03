@@ -22,6 +22,13 @@ class Deals
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=30, nullable=false)
+     */
+    private $name;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdOn", type="datetime", nullable=false)
@@ -41,13 +48,6 @@ class Deals
      * @ORM\Column(name="bigImg", type="string", length=160, nullable=false)
      */
     private $bigimg;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="region", type="string", length=30, nullable=false)
-     */
-    private $region;
 
     /**
      * @var string
@@ -130,6 +130,30 @@ class Deals
     }
 
     /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Deals
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set createdon
      *
      * @param \DateTime $createdon
@@ -199,30 +223,6 @@ class Deals
     public function getBigimg()
     {
         return $this->bigimg;
-    }
-
-    /**
-     * Set region
-     *
-     * @param string $region
-     *
-     * @return Deals
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
-     * Get region
-     *
-     * @return string
-     */
-    public function getRegion()
-    {
-        return $this->region;
     }
 
     /**
@@ -440,35 +440,5 @@ class Deals
     {
         return $this->vendorid;
     }
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=30, nullable=false)
-     */
-    private $name;
-
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Deals
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }
+

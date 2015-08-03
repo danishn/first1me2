@@ -130,6 +130,41 @@ $(document).ready(function(){
     }
     vendorListing();
     
+    $("#region").keyup(function(event)
+    {
+        if((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 46)
+        {
+            suggestion_prefix = $("#region").val();
+            if(suggestion_prefix != "")
+            {
+                $.ajax({
+                    url : BASE_URL + "/Places/GetCities",
+                    type : "POST",
+                    headers : {"Api-Key": "1234"},
+                    data : {"countryCode" : "IN", "input" : suggestion_prefix},
+
+                    success : function(data){
+                        response = JSON.parse(data);
+                        if(response.status == "success"){
+                            //console.log(response.data);
+                            $("#regionList").empty();
+                            for(var i=0; i<response.data.length; i++)
+                            {
+                                $("#regionList").append("<option value='" + response.data[i] + "'>");
+                            }
+                        }
+                        else
+                            console.log("Error : ", data);
+                    },
+
+                    error : function(XMLHttpRequest, textStatus, errorThrown){ 
+                        console.log("Status: " + textStatus + ", Error: " + errorThrown); 
+                    }  
+                });
+            }
+        }
+    });
+    
     
     $("form").submit(function(event){	//GENERIC form submit function
 	event.preventDefault();
@@ -152,11 +187,11 @@ $(document).ready(function(){
                 response = JSON.parse(data);
                 if(response.status == "success"){
                     //console.log(response.data[0]);
-                    $(form_id + "_success").text(response.data[0]).fadeIn(2000).fadeOut(2000);
+                    $(form_id + "_success").text(response.data[0]).fadeIn(2000);
                     dealStat();
                 }
                 else{
-                    $(form_id + "_danger").text("Error Code #" + response.message.Code + ", " + response.message.Title).fadeIn(2000);
+                    $(form_id + "_danger").text("Error Code #" + response.message.Code + ", " + response.message.Title);
                 }
                 $(form_id + "input[type='reset']").trigger("click");
             },

@@ -131,3 +131,4 @@ class Comments
         return $this->dealid;
     }
 }
+
