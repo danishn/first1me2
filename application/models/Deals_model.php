@@ -211,7 +211,16 @@ class Deals_model extends CI_Model
         if(($user = $this->doctrine->em->getRepository('Entities\User')->find($userId)) == NULL)
             return array("status" => "error", "message" => array("Title" => "Invalid User ID.", "Code" => "503"));
         $con = $this->em->getConnection();
-        $query = $con->prepare("SELECT deals.id, deals.name, deals.categoryId, deals.vendorId, deals.createdOn, deals.thumbnailImg, deals.bigImg, deals.region, deals.shortDesc, deals.longDesc, deals.likes, deals.views, deals.pseudoViews, deals.expiresOn, deals.status from deals INNER JOIN category ON deals.categoryId = category.id WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = $userId) And deals.status = 1 And deals.expiresOn >= CURDATE()");
+        //$query = $con->prepare("SELECT deals.id, deals.name, deals.categoryId, deals.vendorId, deals.createdOn, deals.thumbnailImg, deals.bigImg, deals.shortDesc, deals.longDesc, deals.likes, deals.views, deals.pseudoViews, deals.expiresOn, deals.status from deals INNER JOIN category ON deals.categoryId = category.id WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = $userId) And deals.status = 1 And deals.expiresOn >= CURDATE()");
+        $query = $con->prepare("SELECT deals.id, deals.name, deals.categoryId, deals.vendorId, deals.createdOn, deals.thumbnailImg, deals.bigImg, deals.shortDesc, deals.longDesc, deals.likes, deals.views, deals.pseudoViews, deals.expiresOn, deals.status
+                                from deals INNER JOIN category ON deals.categoryId = category.id
+                                INNER JOIN deal_region ON deals.id = deal_region.dealId
+                                WHERE category.id IN (SELECT categoryId FROM subscriptions WHERE userId = $userId)
+                                And deals.status = 1
+                                And deals.expiresOn >= CURDATE()
+                                And deal_region.city = (SELECT city from user where id = $userId)
+                                And deal_region.state = (SELECT state from user where id = $userId)
+                                And deal_region.country = (SELECT country from user where id = $userId)");
         $query->execute();
         $data = $query->fetchAll();
         //var_dump($data);exit;
