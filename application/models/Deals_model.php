@@ -103,7 +103,7 @@ class Deals_model extends CI_Model
     }
     //---------------------
     
-    public function CreateDeals($name, $categoryId, $vendorId, $country, $state, $city, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
+    public function CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
         
         $category = $this->em->getRepository('Entities\Category')->find($categoryId);
         $vendor = $this->em->getRepository('Entities\Vendor')->find($vendorId);
@@ -130,11 +130,25 @@ class Deals_model extends CI_Model
         $deals->setExpireson(new \DateTime((string)$expiresOn));
         $deals->setStatus($status);
         
+        $region = explode(',', $region);
+        $city = trim($region[0]);
+        $state = trim($region[1]);
+        $country = trim($region[2]);
+        
         $deal_region = new Entities\DealRegion;
+        $deal_region->setCity($city);
+        $deal_region->setState($state);
+        $deal_region->setCountry($country);
+        
         //var_dump($deals);exit;
         try{
             $this->em->persist($deals);
             $this->em->flush();
+            
+            $deal_region->setDealid($deals);
+            $this->em->persist($deal_region);
+            $this->em->flush();
+            
              if(isset($_FILES['dealImg'])){   
                 $pic = explode('.', $_FILES['dealImg']['name']);
                 

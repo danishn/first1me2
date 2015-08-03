@@ -89,7 +89,9 @@ class Stat_model extends CI_Model
             $deal->name = $allDeals[$i]->getName();
             $deal->thumbnailImg = $allDeals[$i]->getThumbnailimg();
             $deal->category = $allDeals[$i]->getCategoryid()->getDisplayname();
-            $deal->region = $allDeals[$i]->getRegion();
+            
+            $region = $this->doctrine->em->getRepository('Entities\DealRegion')->findBy(array("dealid" => $allDeals[$i]));
+            $deal->region = count($region); //populate DealRegion table first
             $deal->views = $allDeals[$i]->getViews();
             
             $interval = strtotime($allDeals[$i]->getExpireson()->format('Y-m-d H:i:s')) - strtotime(date("Y-m-d H:i:s"));
