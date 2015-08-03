@@ -220,54 +220,10 @@ class Deals_model extends CI_Model
                                 And deals.expiresOn >= CURDATE()
                                 And deal_region.city = (SELECT city from user where id = $userId)
                                 And deal_region.state = (SELECT state from user where id = $userId)
-                                And deal_region.country = (SELECT country from user where id = $userId)");
+                                And deal_region.country = (SELECT country from user where id = $userId)
+                                And deals.expiresOn >= CURDATE()");
         $query->execute();
         $data = $query->fetchAll();
-        //var_dump($data);exit;
-        //-----------------------------------------
-        
-        /*$mySubscriptions = $this->doctrine->em->getRepository('Entities\Subscriptions')->findBy(
-                array('userid' => $userId)
-                );
-        if($mySubscriptions == NULL)
-            return array("status" => "error", "message" => array("Title" => "Please subscribe atleast one Category first.", "Code" => "503"));
-        
-        //var_dump(count($this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => 1))));exit;
-        for($i = 0; $i < count($mySubscriptions); $i++)
-            $myDeals[$i] = $this->doctrine->em->getRepository('Entities\Deals')->findBy(array('categoryid' => $mySubscriptions[$i]->getCategoryid()->getId()));
-        
-        if(is_array($myDeals) && empty($myDeals))
-            return array("status" => "error", "message" => array("Title" => "No Deals Found.", "Code" => "404"));
-        
-        $j = 0;
-        for($i = 0; $i < count($myDeals); $i++){
-            if(!empty($myDeals[$i]))
-            {
-                foreach($myDeals[$i] as $deal)
-                {
-                    $data[$j] = new stdClass();
-
-                    $data[$j]->id = $deal->getId();
-                    $data[$j]->name = $deal->getName();
-                    $data[$j]->categoryId = $deal->getCategoryid()->getId();
-                    $data[$j]->vendorId = $deal->getVendorid()->getId();
-                    $data[$j]->createdOn = $deal->getCreatedon();
-                    $data[$j]->dealImg = $deal->getThumbnailimg();
-                    $data[$j]->bigImg = $deal->getBigimg();
-                    $data[$j]->region = $deal->getRegion();
-                    $data[$j]->shortDesc = $deal->getShortdesc();
-                    $data[$j]->longDesc = $deal->getLongdesc();
-                    $data[$j]->likes = $deal->getLikes();
-                    $data[$j]->views = $deal->getViews();
-                    $data[$j]->pseudoViews = $deal->getPseudoviews();
-                    $data[$j]->expiresOn = $deal->getExpireson();
-                    $data[$j]->status = $deal->getStatus();
-
-                    $data[$j]->seen = in_array($deal->getId(), self::getSeenDealIds($userId));
-                    $j++;
-                }
-            }
-        }*/
         
         if(isset($data) && count($data) > 0)
             return array("status" => "success", "data" =>$data);
@@ -285,7 +241,9 @@ class Deals_model extends CI_Model
             $data->shortDesc = $deal->getShortdesc();
             $data->longDesc = $deal->getLongdesc();
             $data->pseudoViews = $deal->getPseudoviews();
-            $data->region = $deal->getRegion();
+            $region = $this->doctrine->em->getRepository('Entities\DealRegion')->findBy(array("dealid" => $deal));
+            $deal->region = count($region); //populate DealRegion table first
+            //$data->region = $deal->getRegion();
             $data->expiresOn = $deal->getExpireson();
             $data->status = $deal->getStatus();
             
