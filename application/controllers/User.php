@@ -45,6 +45,12 @@ class User extends CI_Controller
             exit;
         }
         
+        if(preg_match("/[a-zA-Z]{1,20}/", $state = isset($_POST['state']) ? trim($_POST['state']) : "") == 0)
+        {
+            echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid State Name.", "Code" => "400")));
+            exit;
+        }
+        
         if(preg_match("/[a-zA-Z]{1,20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
         {
             echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid City Name.", "Code" => "400")));
@@ -67,7 +73,7 @@ class User extends CI_Controller
         $fbStatus = 0;
         
         $this->load->model('User_model');
-        echo json_encode($this->User_model->CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus));
+        echo json_encode($this->User_model->CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $state, $city, $password, $fbStatus));
     }
     
     public function FacebookShare(){

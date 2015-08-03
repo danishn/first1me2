@@ -15,7 +15,7 @@ class User_model extends CI_Model
         $this->em = $this->doctrine->em;
     }
     
-    public function CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $city, $password, $fbStatus){
+    public function CreateUser($token, $os, $firstName, $lastName, $email, $mobile, $country, $state, $city, $password, $fbStatus){
         $thisUser = $this->doctrine->em->getRepository('Entities\User')->findBy(array('email' => $email));
         if(is_array($thisUser) && !empty($thisUser))
         {
@@ -31,6 +31,7 @@ class User_model extends CI_Model
         $user->setEmail($email);
         $user->setMobile($mobile);
         $user->setCountry($country);
+        $user->setState($state);
         $user->setCity($city);
         $user->setPassword(crypt($password, strlen($email)));
         $user->setFbstatus($fbStatus);

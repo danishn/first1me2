@@ -125,8 +125,12 @@
                 </div><!-- /.box-tools -->
             </div><!-- /.box-header -->
             <div class="box-body">
-                <div class="alert alert-success" role="alert" id="dealsAddForm_success" style="display: none;"></div>
-                <div class="alert alert-danger" role="alert" id="dealsAddForm_danger" style="display: none;"></div>
+                <div class="alert alert-success alert-dismissable" role="alert" id="dealsAddForm_success" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                </div>
+                <div class="alert alert-danger alert-dismissable" role="alert" id="dealsAddForm_danger" style="display: none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                </div>
                 <form id="dealsAddForm" action="/Deals/Add" enctype="multipart/form-data">
                     <div class="modal-body" style="width: 50%; margin-left: 10%;">
                         <div class="row">

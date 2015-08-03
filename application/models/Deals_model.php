@@ -34,73 +34,6 @@ class Deals_model extends CI_Model
         return $dealIds;
     }
     
-    public function gcm(){   
-        /*
-        // Select brodcast receivers depending upon type of broadcast notification
-            $data = array(
-                'type' => 'event',
-                'event_id' => 72
-            );
-            $this->load->model('Notification_model', 'notification');
-            $reg_ids = $this->notification->get_tokens($data);
-            var_dump($reg_ids);exit;
-        */
-        // -----------------------------------------------------------------------------------------
-        
-        
-        //  Fetch from db
-        $this->em = $this->doctrine->em;        // Doctrine initialization
-        $gcm_users = $this->em->getRepository('Entities\NotificationIds')->findAll();
-        
-        //var_dump($gcm_users);exit;
-        
-        $registration_ids = [];
-        
-        if($gcm_users)
-        {
-             foreach($gcm_users as $gcm_user){
-                 $registration_ids[] = $gcm_user->getToken();    
-             }
-        }
-        
-        //$registration_ids[] = $this->input->post('registration_id');
-        
-        if($registration_ids[0] == null){
-            echo 'error No Registration Ids found';
-            exit;
-        }
-        
-        $message = array(
-            "title" => "New Deals Waiting",
-            "body" => 'Recieved New Notification..'
-         );
-        
-        $data = array(
-            "type" => 'event',
-            "msg" => 'New Notification',
-            "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
-         );
-        
-        
-        // GCM Call
-        $this->load->file('application/classes/GCM.php');
-        $gcm = new GCM();
-        $gcm_res = $gcm->send_notification($registration_ids, $message, $data);
-        
-        // APN Call
-        $this->load->file('application/classes/APN.php');
-        $apn = new APN();
-        $apn_res = $apn->send_notification($registration_ids, $message, $data);
-        
-        $response =new Response();
-        $response->setSuccess('true');
-        $response->setdata(array('gcm_response'=>$gcm_res, 'apn_response'=>$apn_res));
-        $response->setError(null);
-                
-        $response->respond();
-        exit;
-        
-    }
     //---------------------
     
     public function CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
@@ -121,7 +54,7 @@ class Deals_model extends CI_Model
         $deals->setCreatedon(new \DateTime("now"));
         $deals->setThumbnailimg("/public/images/deal/thumb/default.png");
         $deals->setBigimg("/public/images/deal/big/default.png");
-        $deals->setRegion($region);
+        
         $deals->setShortdesc($shortDesc);
         $deals->setLongdesc($longDesc);
         $deals->setLikes($likes);
@@ -129,10 +62,26 @@ class Deals_model extends CI_Model
         $deals->setPseudoviews($pseudoViews);
         $deals->setExpireson(new \DateTime((string)$expiresOn));
         $deals->setStatus($status);
+        
+        $region = explode(',', $region);
+        $city = trim($region[0]);
+        $state = count($region) == 3 ? trim($region[1]) : $region[0];
+        $country = trim($region[count($region) - 1]);
+        
+        $deal_region = new Entities\DealRegion;
+        $deal_region->setCity($city);
+        $deal_region->setState($state);
+        $deal_region->setCountry($country);
+        
         //var_dump($deals);exit;
         try{
             $this->em->persist($deals);
             $this->em->flush();
+            
+            $deal_region->setDealid($deals);
+            $this->em->persist($deal_region);
+            $this->em->flush();
+            
              if(isset($_FILES['dealImg'])){   
                 $pic = explode('.', $_FILES['dealImg']['name']);
                 
@@ -208,14 +157,15 @@ class Deals_model extends CI_Model
                     }
                 }
             }
-            //print_r($gcmToken);
-            //return array("status" => "success", "data" => array("Deal Added Successfully."));//'\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res_res));
-            return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result: " . $gcm_res . "\nAPN Result: " . $apn_res));
+            
+            $gcm_res = json_decode($gcm_res, true);
+            $apn_res = json_decode($apn_res, true);
+            return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result- Success : " . $gcm_res['success'] . ", Failure : " . $gcm_res['failure'] . "\nAPN Result- Success : " . $apn_res['success'] . ", Failure : " . $apn_res['failure'] . "."));
         }
         catch(Exception $exc)
         {
-            //return array("status" => "error", "message" => array("Title" => "Exception Occured", "Code" => "503"));
-            return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
+            return array("status" => "error", "message" => array("Title" => "Exception Occured.", "Code" => "503"));
+            //return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
         }
     }
     

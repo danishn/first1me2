@@ -73,6 +73,13 @@ class User
     /**
      * @var string
      *
+     * @ORM\Column(name="state", type="string", length=20, nullable=false)
+     */
+    private $state;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="city", type="string", length=20, nullable=false)
      */
     private $city;
@@ -278,6 +285,30 @@ class User
     }
 
     /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return User
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
      * Set city
      *
      * @param string $city
@@ -373,3 +404,4 @@ class User
         return $this->registeredon;
     }
 }
+

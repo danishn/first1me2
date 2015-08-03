@@ -146,7 +146,7 @@ $(document).ready(function(){
                     success : function(data){
                         response = JSON.parse(data);
                         if(response.status == "success"){
-                            console.log(response.data);
+                            //console.log(response.data);
                             $("#regionList").empty();
                             for(var i=0; i<response.data.length; i++)
                             {
@@ -187,11 +187,11 @@ $(document).ready(function(){
                 response = JSON.parse(data);
                 if(response.status == "success"){
                     //console.log(response.data[0]);
-                    $(form_id + "_success").text(response.data[0]).fadeIn(2000).fadeOut(2000);
+                    $(form_id + "_success").text(response.data[0]).fadeIn(2000);
                     dealStat();
                 }
                 else{
-                    $(form_id + "_danger").text("Error Code #" + response.message.Code + ", " + response.message.Title).fadeIn(2000);
+                    $(form_id + "_danger").text("Error Code #" + response.message.Code + ", " + response.message.Title);
                 }
                 $(form_id + "input[type='reset']").trigger("click");
             },

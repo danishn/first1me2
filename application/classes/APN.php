@@ -35,7 +35,7 @@ class APN {
             'notification' => $message,
             'data' => $data,
             'content_available' => true,
-            'collapse_key' => $data['type']
+            'collapse_key' => 'deal'
         );
         
        //echo json_encode($fields);exit;

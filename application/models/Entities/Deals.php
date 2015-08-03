@@ -52,13 +52,6 @@ class Deals
     /**
      * @var string
      *
-     * @ORM\Column(name="region", type="string", length=30, nullable=false)
-     */
-    private $region;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="shortDesc", type="string", length=255, nullable=false)
      */
     private $shortdesc;
@@ -230,30 +223,6 @@ class Deals
     public function getBigimg()
     {
         return $this->bigimg;
-    }
-
-    /**
-     * Set region
-     *
-     * @param string $region
-     *
-     * @return Deals
-     */
-    public function setRegion($region)
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
-     * Get region
-     *
-     * @return string
-     */
-    public function getRegion()
-    {
-        return $this->region;
     }
 
     /**
@@ -472,3 +441,4 @@ class Deals
         return $this->vendorid;
     }
 }
+
