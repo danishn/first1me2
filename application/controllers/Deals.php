@@ -41,9 +41,21 @@ class Deals extends CI_Controller
                 exit;
             }
 
-            if(preg_match("/^\w[a-zA-A0-9\.\,\s\/\\\]{1,30}/", $region = isset($_POST['region']) ? trim($_POST['region']) : "") == 0)
+            if(preg_match("/[a-zA-Z]{1,20}/", $country = isset($_POST['country']) ? trim($_POST['country']) : "") == 0)
             {
-                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Region.", "Code" => "400")));
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid Country Name.", "Code" => "400")));
+                exit;
+            }
+
+            if(preg_match("/[a-zA-Z]{1,20}/", $state = isset($_POST['state']) ? trim($_POST['state']) : "") == 0)
+            {
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid State Name.", "Code" => "400")));
+                exit;
+            }
+
+            if(preg_match("/[a-zA-Z]{1,20}/", $city = isset($_POST['city']) ? trim($_POST['city']) : "") == 0)
+            {
+                echo json_encode(array("status" => "error", "message" => array("Title" => "Invalid City Name.", "Code" => "400")));
                 exit;
             }
 
@@ -71,7 +83,7 @@ class Deals extends CI_Controller
             $status = 1;
 
             $this->load->model('Deals_model');
-            echo json_encode($this->Deals_model->CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
+            echo json_encode($this->Deals_model->CreateDeals($name, $categoryId, $vendorId, $country, $state, $city, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status));
         /*}
         else
             echo json_encode(array("status" => "error", "message" => array("Title" => "Authentication Failure.", "Code" => "401")));*/

@@ -103,7 +103,7 @@ class Deals_model extends CI_Model
     }
     //---------------------
     
-    public function CreateDeals($name, $categoryId, $vendorId, $region, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
+    public function CreateDeals($name, $categoryId, $vendorId, $country, $state, $city, $shortDesc, $longDesc, $likes, $views, $pseudoViews, $expiresOn, $status){
         
         $category = $this->em->getRepository('Entities\Category')->find($categoryId);
         $vendor = $this->em->getRepository('Entities\Vendor')->find($vendorId);
@@ -121,7 +121,7 @@ class Deals_model extends CI_Model
         $deals->setCreatedon(new \DateTime("now"));
         $deals->setThumbnailimg("/public/images/deal/thumb/default.png");
         $deals->setBigimg("/public/images/deal/big/default.png");
-        $deals->setRegion($region);
+        
         $deals->setShortdesc($shortDesc);
         $deals->setLongdesc($longDesc);
         $deals->setLikes($likes);
@@ -129,6 +129,8 @@ class Deals_model extends CI_Model
         $deals->setPseudoviews($pseudoViews);
         $deals->setExpireson(new \DateTime((string)$expiresOn));
         $deals->setStatus($status);
+        
+        $deal_region = new Entities\DealRegion;
         //var_dump($deals);exit;
         try{
             $this->em->persist($deals);
