@@ -96,11 +96,15 @@ class Stat_model extends CI_Model
             
             $interval = strtotime($allDeals[$i]->getExpireson()->format('Y-m-d H:i:s')) - strtotime(date("Y-m-d H:i:s"));
             //echo "\nExpires " . $allDeals[$i]->getExpireson() . "\n" . $interval . "\n";
-            if($allDeals[$i]->getStatus() == 1 && $interval > 0)
+            if($allDeals[$i]->getStatus() == 1 && $interval > 0){
                 ++$activDeals;
+                $deal->status = $allDeals[$i]->getStatus();
+            }
+            else
+                $deal->status = 2;  //status 2 for expired deals
             
             $deal->expiresOn = $allDeals[$i]->getExpireson();
-            $deal->status = $allDeals[$i]->getStatus();
+            
             
             $stat->deals[$i] = $deal;
         }
