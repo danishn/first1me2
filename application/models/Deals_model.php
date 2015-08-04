@@ -74,99 +74,103 @@ class Deals_model extends CI_Model
         $deal_region->setCountry($country);
         
         //var_dump($deals);exit;
-        try{
-            $this->em->persist($deals);
-            $this->em->flush();
-            
-            $deal_region->setDealid($deals);
-            $this->em->persist($deal_region);
-            $this->em->flush();
-            
-             if(isset($_FILES['dealImg'])){   
-                $pic = explode('.', $_FILES['dealImg']['name']);
-                
-                // upload event photo to server & set image URLs
-                $config['upload_path'] = 'public/images/deal/big';
-                $config['allowed_types'] = 'gif|jpeg|jpg|png';
-                $config['max_size']	= '10000';
-                $config['overwrite'] = true;
-                $config['file_name'] = $deals->getId(). "." .$pic[count($pic)-1];
-                
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
-                
-                if(!$this->upload->do_upload('dealImg')){
-                    //return 'error '.$this->upload->display_errors();
-                    return array("status" => "error", "message" => array("Title" => "Deal Added, but failed to upload Image.", "Code" => "404"));
-                }
-                else{
-                    $data = $this->upload->data();
-                    $thumb_url  = $big_url = '/public/images/deal/big/' . $data['file_name'];
-                    
-                    $image = new ImageResize('public/images/deal/big/'.$data['file_name']);
-                    //var_dump($image);exit;
-                    $image->scale(20);
-                    $image->save('public/images/deal/thumb/'.$data['file_name']);
-                    $thumb_url = '/public/images/deal/thumb/' . $data['file_name'];
-                    
-                    $deals->setThumbnailimg($thumb_url);
-                    $deals->setBigimg($big_url);
-                    $this->em->flush();
-                    $gcmToken = array();
-                    $apnToken = array();
-                    $gcm_res = "GCM Failure";
-                    $apn_res = "APN Failure";
-                    //Send Push Notification
-                    $subscribed = $this->em->getRepository('Entities\Subscriptions')->findBy(array('categoryid' => $deals->getCategoryid()->getId()));
-                    //var_dump($subscribed);exit;
-                    if(is_array($subscribed) && !empty($subscribed)){
-                        foreach($subscribed as $subscription){
-                            stristr($subscription->getUserid()->getOs(), 'android') ? $gcmToken[] = $subscription->getUserid()->getToken() : $apnToken[] = $subscription->getUserid()->getToken();
+        if(isset($_FILES['dealImg']) && $_FILES['dealImg']['size'] <= 50000){
+            try{
+                $this->em->persist($deals);
+                $this->em->flush();
+
+                $deal_region->setDealid($deals);
+                $this->em->persist($deal_region);
+                $this->em->flush();
+
+                 if(isset($_FILES['dealImg'])){
+                    $pic = explode('.', $_FILES['dealImg']['name']);
+
+                    // upload event photo to server & set image URLs
+                    $config['upload_path'] = 'public/images/deal/big';
+                    $config['allowed_types'] = 'gif|jpeg|jpg|png';
+                    $config['max_size']	= '50000';
+                    $config['overwrite'] = true;
+                    $config['file_name'] = $deals->getId(). "." .$pic[count($pic)-1];
+
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+
+                    if(!$this->upload->do_upload('dealImg')){
+                        //return 'error '.$this->upload->display_errors();
+                        return array("status" => "error", "message" => array("Title" => "Deal Added, but failed to upload Image.", "Code" => "404"));
+                    }
+                    else{
+                        $data = $this->upload->data();
+                        $thumb_url  = $big_url = '/public/images/deal/big/' . $data['file_name'];
+
+                        $image = new ImageResize('public/images/deal/big/'.$data['file_name']);
+                        //var_dump($image);exit;
+                        $image->scale(20);
+                        $image->save('public/images/deal/thumb/'.$data['file_name']);
+                        $thumb_url = '/public/images/deal/thumb/' . $data['file_name'];
+
+                        $deals->setThumbnailimg($thumb_url);
+                        $deals->setBigimg($big_url);
+                        $this->em->flush();
+                        $gcmToken = array();
+                        $apnToken = array();
+                        $gcm_res = "GCM Failure";
+                        $apn_res = "APN Failure";
+                        //Send Push Notification
+                        $subscribed = $this->em->getRepository('Entities\Subscriptions')->findBy(array('categoryid' => $deals->getCategoryid()->getId()));
+                        //var_dump($subscribed);exit;
+                        if(is_array($subscribed) && !empty($subscribed)){
+                            foreach($subscribed as $subscription){
+                                stristr($subscription->getUserid()->getOs(), 'android') ? $gcmToken[] = $subscription->getUserid()->getToken() : $apnToken[] = $subscription->getUserid()->getToken();
+                            }
+                        }
+
+                        $message = array(
+                            "title" => "New Deals Added",
+                            "body" => 'Recieved New Notification..'
+                         );
+
+                        /*$data = array(
+                            "type" => 'event',
+                            "msg" => 'New Notification',
+                            "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
+                         );*/
+
+                        $data = array(
+                            "title" => $deals->getName(),
+                            "body" => $deals->getShortdesc(),
+                            "deal" => $deals->getId()
+                         );
+
+                        // GCM Call
+                        if(is_array($gcmToken) && !empty($gcmToken)){
+                            $this->load->file('application/classes/GCM.php');
+                            $gcm = new GCM();
+                            $gcm_res = $gcm->send_notification($gcmToken, $message, $data);
+                        }
+
+                        // APN Call
+                        if(is_array($apnToken) && !empty($apnToken)){
+                            $this->load->file('application/classes/APN.php');
+                            $apn = new APN();
+                            $apn_res = $apn->send_notification($apnToken, $message, $data);
                         }
                     }
-                    
-                    $message = array(
-                        "title" => "New Deals Added",
-                        "body" => 'Recieved New Notification..'
-                     );
-
-                    /*$data = array(
-                        "type" => 'event',
-                        "msg" => 'New Notification',
-                        "description" => "Type can be anything from event/meeting/news/favorites/tables indicating whats this notification is for. Depending on type, app should reload/refresh respective view.",
-                     );*/
-                    
-                    $data = array(
-                        "title" => $deals->getName(),
-                        "body" => $deals->getShortdesc(),
-                        "deal" => $deals->getId()
-                     );
-                    
-                    // GCM Call
-                    if(is_array($gcmToken) && !empty($gcmToken)){
-                        $this->load->file('application/classes/GCM.php');
-                        $gcm = new GCM();
-                        $gcm_res = $gcm->send_notification($gcmToken, $message, $data);
-                    }
-
-                    // APN Call
-                    if(is_array($apnToken) && !empty($apnToken)){
-                        $this->load->file('application/classes/APN.php');
-                        $apn = new APN();
-                        $apn_res = $apn->send_notification($apnToken, $message, $data);
-                    }
                 }
+
+                $gcm_res = json_decode($gcm_res, true);
+                $apn_res = json_decode($apn_res, true);
+                return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result- Success : " . $gcm_res['success'] . ", Failure : " . $gcm_res['failure'] . "\nAPN Result- Success : " . $apn_res['success'] . ", Failure : " . $apn_res['failure'] . "."));
             }
-            
-            $gcm_res = json_decode($gcm_res, true);
-            $apn_res = json_decode($apn_res, true);
-            return array("status" => "success", "data" => array("Deal Added Successfully.\nPush Notification sent to " . count($gcmToken) . " Android users and " . count($apnToken) . " iOs users.\nGCM Result- Success : " . $gcm_res['success'] . ", Failure : " . $gcm_res['failure'] . "\nAPN Result- Success : " . $apn_res['success'] . ", Failure : " . $apn_res['failure'] . "."));
+            catch(Exception $exc)
+            {
+                return array("status" => "error", "message" => array("Title" => "Exception Occured.", "Code" => "503"));
+                //return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
+            }
         }
-        catch(Exception $exc)
-        {
-            return array("status" => "error", "message" => array("Title" => "Exception Occured.", "Code" => "503"));
-            //return array("status" => "error", "message" => array("Title" => $exc->getTraceAsString()), "Code" => "503");
-        }
+        else
+            return array("status" => "error", "message" => array("Title" => "Failed to add deal. Image size must be below 50KB.", "Code" => "400"));
     }
     
     public function DemoGCM($email){

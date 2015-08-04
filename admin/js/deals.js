@@ -16,11 +16,11 @@ $(document).ready(function(){
     
     function getStatusButton(status){
         if(status == 0)
-            return "<span class='label label-danger'>Suspend</span>";
+            return "<span class='label label-warning'>Suspend</span>";
         if(status == 1)
             return "<span class='label label-success'>Active</span>";
         if(status == 2)
-            return "<span class='label label-warning'>Pending</span>";
+            return "<span class='label label-danger'>Expired</span>";
         if(status == 3)
             return "<span class='label label-primary'>Hidden</span>";
     }
